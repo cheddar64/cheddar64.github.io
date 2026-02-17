@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rhythmic Entrainment & Temporal Order Memory | Laith Jaroudi</title>
+  <meta name="description" content="Honors thesis investigating whether isochronous auditory rhythms can enhance encoding of visual episodic memory for temporal order.">
+
+  <!-- Fonts -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&f[]=general-sans@600,500,400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/case-study.css">
+
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body>
+  <!-- Dither Background -->
+  <canvas id="dither-background" class="dither-background" data-direction="-0.5,1"></canvas>
+
+  <!-- Background Layers -->
+  <div class="background-layers">
+    <div class="gradient-orbs">
+      <div class="orb orb--purple orb--work-1"></div>
+      <div class="orb orb--blue orb--about-2"></div>
+    </div>
+    <div class="abstract-shapes">
+      <div class="shape shape--ring shape--ring-1"></div>
+    </div>
+  </div>
+  <div class="grain-overlay"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="../index.html" class="nav__logo">Laith<span>.</span></a>
+
+      <button class="nav__toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav__links">
+        <li><a href="../index.html" class="nav__link">Home</a></li>
+        <li><a href="../work.html" class="nav__link">Work</a></li>
+        <li><a href="../about.html" class="nav__link">About</a></li>
+        <li><a href="../contact.html" class="nav__link">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Case Study Content -->
+  <main class="case-study">
+    <!-- Hero Section -->
+    <header class="case-study__hero">
+      <div class="container">
+        <a href="../work.html" class="case-study__back">
+          <span class="case-study__back-arrow">←</span>
+          Back to Work
+        </a>
+
+        <div class="case-study__meta reveal">
+          <span class="case-study__tag">Honors Thesis</span>
+          <span class="case-study__tag">jsPsych</span>
+          <span class="case-study__tag">Dynamic Attending Theory</span>
+          <span class="case-study__tag case-study__tag--status">In Progress</span>
+        </div>
+
+        <h1 class="case-study__title reveal">Rhythmic Entrainment & Temporal Order Memory</h1>
+
+        <p class="case-study__subtitle reveal">
+          Can isochronous auditory rhythms act as a temporal scaffold to enhance
+          the encoding of visual episodic memory for temporal order?
+        </p>
+
+        <!-- Key Stats -->
+        <div class="case-study__stats reveal">
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">4</span>
+            <span class="case-study__stat-label">Audio Conditions</span>
+          </div>
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">40</span>
+            <span class="case-study__stat-label">Trials Per Subject</span>
+          </div>
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">2</span>
+            <span class="case-study__stat-label">DVs (Acc + RT)</span>
+          </div>
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">Pilot</span>
+            <span class="case-study__stat-label">Current Phase</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Visual - Rhythm Demo -->
+    <div class="case-study__hero-image reveal">
+      <div class="container">
+        <div class="rhythm-demo" id="rhythm-demo">
+          <!-- Main visualization area -->
+          <div class="rhythm-demo__stage">
+            <!-- Left: Image display -->
+            <div class="rhythm-demo__images">
+              <div class="rhythm-demo__frame" id="image-frame">
+                <img src="../assets/images/entrainment/img_1.jpg" alt="Scene" id="demo-image">
+              </div>
+              <div class="rhythm-demo__label">Visual Stimulus</div>
+            </div>
+
+            <!-- Center: Connection indicator -->
+            <div class="rhythm-demo__connector" id="connector">
+              <div class="rhythm-demo__connector-line"></div>
+              <div class="rhythm-demo__sync-badge" id="sync-badge">
+                <span class="rhythm-demo__sync-icon">✓</span>
+                <span class="rhythm-demo__sync-text">SYNC</span>
+              </div>
+            </div>
+
+            <!-- Right: Beat ring -->
+            <div class="rhythm-demo__ring-container" id="ring-container">
+              <svg class="rhythm-demo__ring" viewBox="0 0 120 120">
+                <circle class="rhythm-demo__ring-bg" cx="60" cy="60" r="54" />
+                <circle class="rhythm-demo__ring-progress" id="ring-progress" cx="60" cy="60" r="54" />
+              </svg>
+              <div class="rhythm-demo__ring-center" id="ring-center">
+                <span class="rhythm-demo__beat-num" id="beat-num">1</span>
+              </div>
+              <div class="rhythm-demo__label">Auditory Beat</div>
+            </div>
+          </div>
+
+          <!-- Condition explanation -->
+          <div class="rhythm-demo__explanation" id="explanation">
+            <div class="rhythm-demo__explanation-content">
+              <h4 id="explanation-title">In-Sync Condition</h4>
+              <p id="explanation-text">The musical downbeat lands exactly when each image appears. This alignment may create temporal markers that enhance memory for the order of events.</p>
+            </div>
+          </div>
+
+          <!-- Condition tabs -->
+          <div class="rhythm-demo__tabs">
+            <button class="rhythm-demo__tab rhythm-demo__tab--active" data-condition="sync">
+              <span class="rhythm-demo__tab-dot rhythm-demo__tab-dot--green"></span>
+              In-Sync
+              <button class="rhythm-demo__info" data-info="sync" aria-label="Info">i</button>
+            </button>
+            <button class="rhythm-demo__tab" data-condition="out">
+              <span class="rhythm-demo__tab-dot rhythm-demo__tab-dot--red"></span>
+              Out-of-Sync
+              <button class="rhythm-demo__info" data-info="out" aria-label="Info">i</button>
+            </button>
+            <button class="rhythm-demo__tab" data-condition="ambient">
+              <span class="rhythm-demo__tab-dot rhythm-demo__tab-dot--gray"></span>
+              Ambient
+              <button class="rhythm-demo__info" data-info="ambient" aria-label="Info">i</button>
+            </button>
+            <button class="rhythm-demo__tab" data-condition="metronome">
+              <span class="rhythm-demo__tab-dot rhythm-demo__tab-dot--green"></span>
+              Metronome
+              <button class="rhythm-demo__info" data-info="metronome" aria-label="Info">i</button>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overview Section -->
+    <section class="case-study__section">
+      <div class="container">
+        <div class="case-study__grid">
+          <div class="case-study__sidebar reveal">
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Role</h3>
+              <p class="case-study__info-value">Lead Researcher & Developer</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Timeline</h3>
+              <p class="case-study__info-value">Fall 2025 to Spring 2026</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Supervisors</h3>
+              <p class="case-study__info-value">Luna Li & Dr. Michael Miller</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Lab</h3>
+              <p class="case-study__info-value">Memory & Decision Making Lab, UCSB</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Tools</h3>
+              <p class="case-study__info-value">jsPsych, Pavlovia, SPSS</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Status</h3>
+              <p class="case-study__info-value case-study__info-value--status">Running Pilot Tests</p>
+            </div>
+          </div>
+
+          <div class="case-study__content reveal">
+            <h2 class="case-study__heading">Overview</h2>
+            <p class="case-study__text">
+              This honors thesis investigates whether rhythmic elements in music can enhance our
+              ability to remember the order of a sequence of events. Specifically, I'm testing
+              whether an isochronous auditory rhythm can act as a <strong>temporal scaffold</strong>
+              to improve encoding of visual episodic memory for temporal order.
+            </p>
+            <p class="case-study__text">
+              Building upon Jones & Ward's (2019) findings that rhythmic temporal structure enhances
+              recognition memory, this research extends the investigation to <strong>temporal order
+              judgments</strong> using ecologically valid stimuli, specifically instrumental techno music.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Research Question Section -->
+    <section class="case-study__section case-study__section--alt">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">The Research Question</h2>
+          <p class="case-study__text-large">
+            Many students listen to music while studying. But does rhythmic music actually help
+            or hurt memory encoding? And specifically, can rhythm help us remember <em>when</em>
+            things happened?
+          </p>
+
+          <div class="case-study__research-questions">
+            <h3 class="case-study__subheading">Central Question</h3>
+            <p class="case-study__text" style="font-size: 1.125rem; color: var(--text-primary);">
+              Can an isochronous auditory rhythm act as a temporal scaffold to enhance the encoding
+              of visual episodic memory for temporal order?
+            </p>
+          </div>
+
+          <div class="case-study__theory">
+            <h3 class="case-study__subheading">Theoretical Framework: Dynamic Attending Theory</h3>
+            <p class="case-study__text">
+              Dynamic Attending Theory (DAT) proposes that attention fluctuates rhythmically and
+              can synchronize with external rhythmic stimuli. When auditory rhythms align with
+              visual presentation timing, attention may be optimally allocated at each stimulus
+              onset, potentially enhancing encoding.
+            </p>
+            <p class="case-study__text">
+              Previous research (Jones & Ward, 2019) found that rhythmic presentation enhances
+              <em>recognition</em> memory. This thesis extends that finding to test whether
+              rhythm also enhances <em>temporal order</em> memory, which involves remembering the sequence
+              of events, not just the events themselves.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section class="case-study__section">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">Methodology</h2>
+
+          <div class="case-study__method-grid">
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">Design</h3>
+              <p class="case-study__method-text">
+                <strong>Within-subjects design</strong> with 4 audio conditions randomized
+                across 40 trials (10 per condition). This allows each participant to serve
+                as their own control.
+              </p>
+            </div>
+
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">Audio Conditions</h3>
+              <p class="case-study__method-text">
+                <strong>1.</strong> Techno track IN-SYNC with images<br>
+                <strong>2.</strong> Techno track OUT-OF-SYNC<br>
+                <strong>3.</strong> Ambient drone (no rhythm)<br>
+                <strong>4.</strong> Isochronous metronome
+              </p>
+            </div>
+
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">Task: Temporal Order Judgment</h3>
+              <p class="case-study__method-text">
+                <strong>Encoding:</strong> View 10 neutral scene images sequentially while
+                hearing audio.<br>
+                <strong>Test:</strong> See 2 random images from the sequence, judge which
+                appeared first. Retrieval occurs in silence.
+              </p>
+            </div>
+
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">Dependent Variables</h3>
+              <p class="case-study__method-text">
+                <strong>Accuracy:</strong> Proportion of correct temporal order judgments<br>
+                <strong>Reaction Time:</strong> Speed of correct responses<br>
+                Both measured via jsPsych with millisecond precision.
+              </p>
+            </div>
+          </div>
+
+          <div class="case-study__why-techno">
+            <h3 class="case-study__subheading">Why Techno Music?</h3>
+            <div class="case-study__why-grid">
+              <div class="case-study__why-item">
+                <span class="case-study__why-icon">🎹</span>
+                <div>
+                  <strong>Lyricless</strong>
+                  <p>No interference with the phonological loop or semantic processing</p>
+                </div>
+              </div>
+              <div class="case-study__why-item">
+                <span class="case-study__why-icon">⏰</span>
+                <div>
+                  <strong>Isochronous</strong>
+                  <p>Consistent, predictable beat structure ideal for testing entrainment</p>
+                </div>
+              </div>
+              <div class="case-study__why-item">
+                <span class="case-study__why-icon">🌍</span>
+                <div>
+                  <strong>Ecologically Valid</strong>
+                  <p>Real music that people actually listen to while studying</p>
+                </div>
+              </div>
+              <div class="case-study__why-item">
+                <span class="case-study__why-icon">🔬</span>
+                <div>
+                  <strong>Controlled</strong>
+                  <p>More engaging than metronomes while maintaining experimental control</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="case-study__controls">
+            <h3 class="case-study__subheading">Individual Difference Controls</h3>
+            <p class="case-study__text">
+              To account for variability, participants complete three validated questionnaires:
+            </p>
+            <ul class="case-study__list">
+              <li><strong>STAI</strong>, the State-Trait Anxiety Inventory (Spielberger et al., 1983)</li>
+              <li><strong>Gold-MSI</strong>, the Goldsmith Musical Sophistication Index (Müllensiefen et al., 2014)</li>
+              <li><strong>ACS</strong>, the Attentional Control Survey (Derryberry & Reed, 2002)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hypothesis Section -->
+    <section class="case-study__section case-study__section--alt">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">Hypothesis</h2>
+
+          <div class="case-study__hypothesis">
+            <div class="case-study__hypothesis-card">
+              <h3 class="case-study__hypothesis-title">Primary Prediction</h3>
+              <p class="case-study__hypothesis-text">
+                Participants in the <strong>in-sync techno condition</strong> will show significantly
+                <strong>higher accuracy</strong> and <strong>faster reaction times</strong> in temporal
+                order judgments compared to the out-of-sync, ambient, and metronome conditions.
+              </p>
+            </div>
+
+            <div class="case-study__hypothesis-rationale">
+              <h4>Rationale</h4>
+              <p class="case-study__text">
+                When the musical beat aligns with image presentation, attention should be optimally
+                synchronized at each stimulus onset. This rhythmic entrainment may create stronger
+                temporal markers in memory, making it easier to reconstruct the order of events
+                during retrieval.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Implementation -->
+    <section class="case-study__section">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">Technical Implementation</h2>
+
+          <div class="case-study__tech-stack">
+            <div class="case-study__tech-item">
+              <div class="case-study__tech-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="16 18 22 12 16 6"></polyline>
+                  <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+              </div>
+              <div class="case-study__tech-content">
+                <h3 class="case-study__tech-title">jsPsych</h3>
+                <p class="case-study__tech-desc">
+                  JavaScript library for behavioral experiments. I coded the entire experiment
+                  from scratch, handling precise audio-visual synchronization and millisecond-accurate
+                  response timing.
+                </p>
+              </div>
+            </div>
+
+            <div class="case-study__tech-item">
+              <div class="case-study__tech-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                </svg>
+              </div>
+              <div class="case-study__tech-content">
+                <h3 class="case-study__tech-title">Pavlovia</h3>
+                <p class="case-study__tech-desc">
+                  Online experiment hosting platform integrated with jsPsych. Enables both
+                  in-lab and remote data collection with secure, encrypted data storage.
+                </p>
+              </div>
+            </div>
+
+            <div class="case-study__tech-item">
+              <div class="case-study__tech-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="22"/>
+                </svg>
+              </div>
+              <div class="case-study__tech-content">
+                <h3 class="case-study__tech-title">Audio Engineering</h3>
+                <p class="case-study__tech-desc">
+                  Custom techno track with precisely mapped downbeats. Audio levels capped at
+                  75dB per OSHA guidelines. Participants can adjust volume during practice trials.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Expected Implications -->
+    <section class="case-study__section case-study__section--alt">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">Expected Implications</h2>
+
+          <div class="case-study__insights">
+            <div class="case-study__insight">
+              <div class="case-study__insight-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              </div>
+              <div class="case-study__insight-content">
+                <h3 class="case-study__insight-title">UX Design: Interface Pacing</h3>
+                <p class="case-study__insight-text">
+                  If rhythmic synchronization enhances temporal memory, this could inform the design
+                  of onboarding flows, tutorials, and educational interfaces where sequence matters.
+                  Rhythmic audio cues could help users remember the order of steps.
+                </p>
+              </div>
+            </div>
+
+            <div class="case-study__insight">
+              <div class="case-study__insight-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+              </div>
+              <div class="case-study__insight-content">
+                <h3 class="case-study__insight-title">Educational Technology</h3>
+                <p class="case-study__insight-text">
+                  Understanding how music affects temporal memory encoding could guide recommendations
+                  for study habits and the design of learning applications that incorporate audio.
+                </p>
+              </div>
+            </div>
+
+            <div class="case-study__insight">
+              <div class="case-study__insight-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div class="case-study__insight-content">
+                <h3 class="case-study__insight-title">Cognitive Science Theory</h3>
+                <p class="case-study__insight-text">
+                  This research will extend Dynamic Attending Theory to temporal order memory,
+                  contributing to our understanding of how cross-modal rhythmic synchronization
+                  affects episodic memory encoding.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Current Status -->
+    <section class="case-study__section">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">Current Status</h2>
+
+          <div class="case-study__timeline-progress">
+            <div class="case-study__progress-item case-study__progress-item--complete">
+              <div class="case-study__progress-marker"></div>
+              <div class="case-study__progress-content">
+                <h4>Literature Review & Design</h4>
+                <p>Completed review of DAT literature and finalized experimental design</p>
+              </div>
+            </div>
+            <div class="case-study__progress-item case-study__progress-item--complete">
+              <div class="case-study__progress-marker"></div>
+              <div class="case-study__progress-content">
+                <h4>IRB Approval</h4>
+                <p>Received ethics approval from UCSB Institutional Review Board</p>
+              </div>
+            </div>
+            <div class="case-study__progress-item case-study__progress-item--complete">
+              <div class="case-study__progress-marker"></div>
+              <div class="case-study__progress-content">
+                <h4>Experiment Development</h4>
+                <p>Coded full experiment in jsPsych with audio synchronization</p>
+              </div>
+            </div>
+            <div class="case-study__progress-item case-study__progress-item--active">
+              <div class="case-study__progress-marker"></div>
+              <div class="case-study__progress-content">
+                <h4>Pilot Testing</h4>
+                <p>Currently running pilot tests to validate procedures and timing</p>
+              </div>
+            </div>
+            <div class="case-study__progress-item">
+              <div class="case-study__progress-marker"></div>
+              <div class="case-study__progress-content">
+                <h4>Data Collection</h4>
+                <p>Full data collection from UCSB participant pool</p>
+              </div>
+            </div>
+            <div class="case-study__progress-item">
+              <div class="case-study__progress-marker"></div>
+              <div class="case-study__progress-content">
+                <h4>Analysis & Write-up</h4>
+                <p>Statistical analysis and thesis completion</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="case-study__cta">
+      <div class="container">
+        <div class="case-study__cta-content reveal">
+          <h2 class="case-study__cta-title">Interested in this research?</h2>
+          <p class="case-study__cta-text">
+            This thesis is currently in progress. Check back for results, or get in touch
+            to discuss the methodology and implications.
+          </p>
+          <div class="case-study__cta-buttons">
+            <a href="../contact.html" class="btn btn--primary">
+              Get In Touch
+            </a>
+            <a href="../work.html" class="btn btn--outline">
+              View Other Projects
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Next Project -->
+    <section class="case-study__next">
+      <div class="container">
+        <a href="eeg-synth.html" class="case-study__next-link reveal">
+          <span class="case-study__next-label">Next Project</span>
+          <span class="case-study__next-title">EEG Ambient Synth</span>
+          <span class="case-study__next-arrow">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p class="copyright">© 2025 Laith Jaroudi</p>
+      <nav class="footer-links">
+        <a href="mailto:laithjaroudi@gmail.com">Email</a>
+        <a href="https://linkedin.com/in/laithjaroudi" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="../assets/Laith_Jaroudi_CV.pdf" target="_blank">CV</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+  <script src="../js/dither-background.js"></script>
+
+  <!-- Rhythm Demo Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Constants - matching actual experiment
+      const BPM = 128.57;
+      const BEAT_MS = (60 / BPM) * 1000; // ~466.67ms per beat
+      const IMAGE_DURATION = BEAT_MS * 2; // ~933.34ms (2 beats per image)
+      const NUM_IMAGES = 5;
+      const CIRCUMFERENCE = 2 * Math.PI * 54; // SVG circle circumference
+
+      // Elements
+      const tabs = document.querySelectorAll('.rhythm-demo__tab');
+      const infoBtns = document.querySelectorAll('.rhythm-demo__info');
+      const demoImage = document.getElementById('demo-image');
+      const imageFrame = document.getElementById('image-frame');
+      const ringProgress = document.getElementById('ring-progress');
+      const ringContainer = document.getElementById('ring-container');
+      const ringCenter = document.getElementById('ring-center');
+      const beatNum = document.getElementById('beat-num');
+      const connector = document.getElementById('connector');
+      const syncBadge = document.getElementById('sync-badge');
+      const explanationTitle = document.getElementById('explanation-title');
+      const explanationText = document.getElementById('explanation-text');
+
+      // Sample images
+      const images = [
+        '../assets/images/entrainment/img_1.jpg',
+        '../assets/images/entrainment/img_5.jpg',
+        '../assets/images/entrainment/img_10.jpg',
+        '../assets/images/entrainment/img_15.jpg',
+        '../assets/images/entrainment/img_20.jpg'
+      ];
+
+      // Condition data
+      const conditions = {
+        sync: {
+          offset: 0,
+          hasRing: true,
+          color: '#22c55e',
+          synced: true,
+          title: 'In-Sync Condition',
+          text: 'The musical downbeat lands exactly when each image appears. This alignment may create temporal markers that enhance memory for the order of events.',
+          badge: { icon: '✓', text: 'SYNC' }
+        },
+        out: {
+          offset: BEAT_MS / 2,
+          hasRing: true,
+          color: '#ef4444',
+          synced: false,
+          title: 'Out-of-Sync Condition',
+          text: 'The downbeat lands mid-image (half-beat offset of ~233ms). This misalignment disrupts the potential temporal scaffold, testing whether synchronization matters.',
+          badge: { icon: '✗', text: 'OFFSET' }
+        },
+        ambient: {
+          offset: 0,
+          hasRing: false,
+          color: '#6b7280',
+          synced: null,
+          title: 'Ambient Condition',
+          text: 'A continuous drone with no rhythmic structure. This control condition tests whether any background audio affects memory, or if rhythm specifically is required.',
+          badge: { icon: '~', text: 'NO BEAT' }
+        },
+        metronome: {
+          offset: 0,
+          hasRing: true,
+          color: '#22c55e',
+          synced: true,
+          title: 'Metronome Condition',
+          text: 'Simple clicks aligned with image transitions. This control tests whether rhythmic complexity (music vs. clicks) affects the entrainment benefit.',
+          badge: { icon: '✓', text: 'SYNC' }
+        }
+      };
+
+      // State
+      let currentCondition = 'sync';
+      let isPlaying = false;
+      let intervalId = null;
+      let beatIntervalId = null;
+
+      // Update UI for condition
+      function updateUI(condition) {
+        const config = conditions[condition];
+
+        // Update ring color
+        ringProgress.style.stroke = config.color;
+        ringContainer.style.setProperty('--ring-color', config.color);
+
+        // Show/hide ring
+        ringContainer.classList.toggle('rhythm-demo__ring-container--hidden', !config.hasRing);
+
+        // Update sync badge
+        syncBadge.innerHTML = `
+          <span class="rhythm-demo__sync-icon">${config.badge.icon}</span>
+          <span class="rhythm-demo__sync-text">${config.badge.text}</span>
+        `;
+        syncBadge.className = 'rhythm-demo__sync-badge';
+        if (config.synced === true) syncBadge.classList.add('rhythm-demo__sync-badge--synced');
+        else if (config.synced === false) syncBadge.classList.add('rhythm-demo__sync-badge--desynced');
+        else syncBadge.classList.add('rhythm-demo__sync-badge--none');
+
+        // Update connector
+        connector.className = 'rhythm-demo__connector';
+        if (config.synced === true) connector.classList.add('rhythm-demo__connector--synced');
+        else if (config.synced === false) connector.classList.add('rhythm-demo__connector--desynced');
+
+        // Update explanation
+        explanationTitle.textContent = config.title;
+        explanationText.textContent = config.text;
+
+        // Update tabs
+        tabs.forEach(tab => {
+          const isActive = tab.dataset.condition === condition;
+          tab.classList.toggle('rhythm-demo__tab--active', isActive);
+        });
+      }
+
+      // Animate the ring (one beat cycle)
+      function animateRing() {
+        ringProgress.style.transition = 'none';
+        ringProgress.style.strokeDashoffset = CIRCUMFERENCE;
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            ringProgress.style.transition = `stroke-dashoffset ${IMAGE_DURATION}ms linear`;
+            ringProgress.style.strokeDashoffset = 0;
+          });
+        });
+      }
+
+      // Flash image frame
+      function flashImage() {
+        imageFrame.classList.add('rhythm-demo__frame--flash');
+        setTimeout(() => imageFrame.classList.remove('rhythm-demo__frame--flash'), 150);
+      }
+
+      // Pulse ring center
+      function pulseCenter() {
+        ringCenter.classList.add('rhythm-demo__ring-center--pulse');
+        setTimeout(() => ringCenter.classList.remove('rhythm-demo__ring-center--pulse'), 200);
+      }
+
+      // Start the demo
+      function startDemo() {
+        if (isPlaying) stopDemo();
+        isPlaying = true;
+
+        const config = conditions[currentCondition];
+        let imageIndex = 0;
+        let beatCount = 1;
+
+        // Update image and flash
+        function cycleImage() {
+          demoImage.src = images[imageIndex];
+          flashImage();
+          imageIndex = (imageIndex + 1) % NUM_IMAGES;
+        }
+
+        // Animate beat
+        function cycleBeat() {
+          beatNum.textContent = beatCount;
+          pulseCenter();
+          if (config.hasRing) animateRing();
+          beatCount = beatCount >= 4 ? 1 : beatCount + 1;
+        }
+
+        // Initial state
+        cycleImage();
+        if (config.hasRing) {
+          setTimeout(() => cycleBeat(), config.offset);
+        }
+
+        // Set up intervals
+        intervalId = setInterval(cycleImage, IMAGE_DURATION);
+
+        if (config.hasRing) {
+          beatIntervalId = setInterval(() => cycleBeat(), IMAGE_DURATION);
+          // Apply offset for out-of-sync
+          if (config.offset > 0) {
+            clearInterval(beatIntervalId);
+            setTimeout(() => {
+              cycleBeat();
+              beatIntervalId = setInterval(() => cycleBeat(), IMAGE_DURATION);
+            }, config.offset);
+          }
+        }
+      }
+
+      // Stop demo
+      function stopDemo() {
+        isPlaying = false;
+        if (intervalId) clearInterval(intervalId);
+        if (beatIntervalId) clearInterval(beatIntervalId);
+      }
+
+      // Change condition
+      function setCondition(condition) {
+        currentCondition = condition;
+        updateUI(condition);
+        startDemo();
+      }
+
+      // Event listeners
+      tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          if (e.target.classList.contains('rhythm-demo__info')) return;
+          setCondition(tab.dataset.condition);
+        });
+      });
+
+      // Info button tooltips (using native title for simplicity)
+      infoBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const condition = btn.dataset.info;
+          const config = conditions[condition];
+          alert(`${config.title}\n\n${config.text}`);
+        });
+      });
+
+      // Auto-start on scroll
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !isPlaying) {
+            updateUI('sync');
+            startDemo();
+          } else if (!entry.isIntersecting && isPlaying) {
+            stopDemo();
+          }
+        });
+      }, { threshold: 0.3 });
+
+      observer.observe(document.getElementById('rhythm-demo'));
+
+      // Initialize
+      updateUI('sync');
+    });
+  </script>
+</body>
+</html>

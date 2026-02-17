@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ball Knowledge | Laith Jaroudi</title>
+  <meta name="description" content="A multiplayer football trivia app for iPhone, showcasing UX research, user flows, and Figma design.">
+
+  <!-- Fonts -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&f[]=general-sans@600,500,400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/case-study.css">
+
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body>
+  <!-- Dither Background -->
+  <canvas id="dither-background" class="dither-background" data-direction="0.5,-1"></canvas>
+
+  <!-- Background Layers -->
+  <div class="background-layers">
+    <div class="gradient-orbs">
+      <div class="orb orb--cyan orb--work-1"></div>
+      <div class="orb orb--blue orb--about-2"></div>
+    </div>
+    <div class="abstract-shapes">
+      <div class="shape shape--ring shape--ring-1"></div>
+    </div>
+  </div>
+  <div class="grain-overlay"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="../index.html" class="nav__logo">Laith<span>.</span></a>
+
+      <button class="nav__toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav__links">
+        <li><a href="../index.html" class="nav__link">Home</a></li>
+        <li><a href="../work.html" class="nav__link">Work</a></li>
+        <li><a href="../about.html" class="nav__link">About</a></li>
+        <li><a href="../contact.html" class="nav__link">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Case Study Content -->
+  <main class="case-study">
+    <!-- Hero Section -->
+    <header class="case-study__hero">
+      <div class="container">
+        <a href="../work.html" class="case-study__back">
+          <span class="case-study__back-arrow">←</span>
+          Back to Work
+        </a>
+
+        <div class="case-study__meta reveal">
+          <span class="case-study__tag">Product Design</span>
+          <span class="case-study__tag">UX Research</span>
+          <span class="case-study__tag">Figma</span>
+          <span class="case-study__tag case-study__tag--status">Coming Soon</span>
+        </div>
+
+        <h1 class="case-study__title reveal">Ball Knowledge</h1>
+
+        <p class="case-study__subtitle reveal">
+          A multiplayer football trivia app for iPhone that tests your knowledge
+          of the beautiful game against friends and fans worldwide.
+        </p>
+
+        <!-- Key Stats -->
+        <div class="case-study__stats reveal">
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">iOS</span>
+            <span class="case-study__stat-label">Platform</span>
+          </div>
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">Multi</span>
+            <span class="case-study__stat-label">Player Mode</span>
+          </div>
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">Figma</span>
+            <span class="case-study__stat-label">Design Tool</span>
+          </div>
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">2026</span>
+            <span class="case-study__stat-label">Year</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Visual - Coming Soon Placeholder -->
+    <div class="case-study__hero-image reveal">
+      <div class="container">
+        <div class="case-study__coming-soon-hero">
+          <svg class="case-study__coming-soon-icon" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Football/Soccer ball icon -->
+            <circle cx="60" cy="60" r="50" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3"/>
+            <circle cx="60" cy="60" r="50" stroke="url(#ballGradient)" stroke-width="2" fill="none"/>
+            <!-- Pentagon pattern -->
+            <path d="M60 25 L75 40 L70 58 L50 58 L45 40 Z" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M85 55 L95 70 L85 85 L70 80 L70 60 Z" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M35 55 L25 70 L35 85 L50 80 L50 60 Z" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M50 85 L45 95 L60 100 L75 95 L70 85 Z" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <!-- Animated ring -->
+            <circle cx="60" cy="60" r="55" stroke="url(#ballGradient)" stroke-width="1" fill="none" stroke-dasharray="345" stroke-dashoffset="0" opacity="0.6">
+              <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="20s" repeatCount="indefinite"/>
+            </circle>
+            <defs>
+              <linearGradient id="ballGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#22d3ee"/>
+                <stop offset="50%" stop-color="#3b82f6"/>
+                <stop offset="100%" stop-color="#8b5cf6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <h2 class="case-study__coming-soon-title">Coming Soon</h2>
+          <p class="case-study__coming-soon-text">
+            This case study is currently in development. Check back soon to see the full
+            UX research process, user flows, and high-fidelity Figma mockups.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview Section -->
+    <section class="case-study__section">
+      <div class="container">
+        <div class="case-study__grid">
+          <div class="case-study__sidebar reveal">
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Role</h3>
+              <p class="case-study__info-value">Product Designer</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Timeline</h3>
+              <p class="case-study__info-value">2026</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Type</h3>
+              <p class="case-study__info-value">Mobile App Design</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Tools</h3>
+              <p class="case-study__info-value">Figma, FigJam</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Status</h3>
+              <p class="case-study__info-value case-study__info-value--status">In Development</p>
+            </div>
+          </div>
+
+          <div class="case-study__content reveal">
+            <h2 class="case-study__heading">Project Preview</h2>
+            <p class="case-study__text">
+              Ball Knowledge is a multiplayer trivia app designed for football enthusiasts.
+              Players compete in real-time matches, testing their knowledge of players,
+              clubs, statistics, and football history.
+            </p>
+            <p class="case-study__text">
+              This project showcases my end-to-end product design process, from initial
+              user research and competitive analysis through wireframing, prototyping,
+              and high-fidelity UI design in Figma.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What to Expect Section -->
+    <section class="case-study__section case-study__section--alt">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">What to Expect</h2>
+
+          <div class="case-study__method-grid">
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">UX Research</h3>
+              <p class="case-study__method-text">
+                User interviews with football fans, competitive analysis of existing
+                trivia apps, and persona development to understand target users.
+              </p>
+            </div>
+
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">User Flows</h3>
+              <p class="case-study__method-text">
+                Detailed user journey maps showing how players navigate through
+                matchmaking, gameplay, and social features.
+              </p>
+            </div>
+
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">Wireframes</h3>
+              <p class="case-study__method-text">
+                Low and mid-fidelity wireframes exploring different layouts and
+                interaction patterns for the core game experience.
+              </p>
+            </div>
+
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">High-Fidelity Mockups</h3>
+              <p class="case-study__method-text">
+                Polished Figma designs with a complete design system, including
+                typography, colors, components, and interactive prototypes.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="case-study__cta">
+      <div class="container">
+        <div class="case-study__cta-content reveal">
+          <h2 class="case-study__cta-title">Stay Tuned</h2>
+          <p class="case-study__cta-text">
+            This case study is coming soon. In the meantime, check out my other
+            projects or get in touch to learn more about my design process.
+          </p>
+          <div class="case-study__cta-buttons">
+            <a href="../work.html" class="btn btn--primary">
+              View Other Projects
+            </a>
+            <a href="../contact.html" class="btn btn--outline">
+              Get In Touch
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Next Project -->
+    <section class="case-study__next">
+      <div class="container">
+        <a href="soundscapes.html" class="case-study__next-link reveal">
+          <span class="case-study__next-label">Next Project</span>
+          <span class="case-study__next-title">Environmental Sound Effects & False Memory</span>
+          <span class="case-study__next-arrow">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p class="copyright">© 2025 Laith Jaroudi</p>
+      <nav class="footer-links">
+        <a href="mailto:laithjaroudi@gmail.com">Email</a>
+        <a href="https://linkedin.com/in/laithjaroudi" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="../assets/Laith_Jaroudi_CV.pdf" target="_blank">CV</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+  <script src="../js/dither-background.js"></script>
+</body>
+</html>

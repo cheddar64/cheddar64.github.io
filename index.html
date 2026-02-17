@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laith Jaroudi | Quantitative UX Researcher & Product Designer</title>
+  <meta name="description" content="Quantitative UX Researcher and Product Designer bridging cognitive science, audio, and human-centered design. UCSB Honors Graduate.">
+
+  <!-- Fonts -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&f[]=general-sans@600,500,400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body>
+  <!-- Dither Background -->
+  <canvas id="dither-background" class="dither-background" data-direction="1,1"></canvas>
+
+  <!-- Background Layers -->
+  <div class="background-layers">
+    <div class="gradient-orbs">
+      <div class="orb orb--blue orb--home-1"></div>
+      <div class="orb orb--cyan orb--home-2"></div>
+      <div class="orb orb--magenta orb--home-3"></div>
+      <div class="orb orb--purple orb--home-4"></div>
+    </div>
+    <div class="abstract-shapes">
+      <div class="shape shape--ring shape--ring-1"></div>
+      <div class="shape shape--ring shape--ring-2"></div>
+      <div class="shape shape--ring shape--ring-3"></div>
+    </div>
+  </div>
+  <div class="grain-overlay"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">Laith<span>.</span></a>
+
+      <button class="nav__toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav__links">
+        <li><a href="index.html" class="nav__link active">Home</a></li>
+        <li><a href="work.html" class="nav__link">Work</a></li>
+        <li><a href="about.html" class="nav__link">About</a></li>
+        <li><a href="contact.html" class="nav__link">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__grid">
+        <div class="hero__content">
+          <!-- Portrait accent -->
+          <div class="hero__avatar hero-anim">
+            <img src="assets/images/portraits/portrait_nb.png" alt="Laith Jaroudi">
+          </div>
+
+          <p class="hero__label hero-anim">Available for opportunities</p>
+
+          <h1 class="hero__title hero-anim">
+            <span>Design</span>
+            <div class="text-swap">
+              <div class="text-swap__track">
+                <div class="text-swap__item">
+                  with the <em class="text-blue">mind</em>
+                </div>
+                
+                <div class="text-swap__item">
+                  for the <em class="text-blue">mind</em>
+                </div>
+                
+                <div class="text-swap__item">
+                  for <em class="gradient-text">you</em>
+                </div>
+                
+                <div class="text-swap__item">
+                  with the <em class="text-blue">mind</em>
+                </div>
+              </div>
+            </div>
+          </h1>
+
+          <p class="hero__subtitle hero-anim">
+            Quantitative UX Researcher & Product Designer bridging cognitive science,
+            audio perception, and human-centered design. Currently finishing my honors
+            degree at UC Santa Barbara.
+          </p>
+
+          <div class="hero__cta hero-anim">
+            <a href="work.html" class="chaos-button">
+              <canvas class="chaos-canvas"></canvas>
+              <span class="chaos-label">View My Work</span>
+            </a>
+            <a href="contact.html" class="btn btn--outline">
+              Get In Touch
+            </a>
+          </div>
+        </div>
+
+        <!-- Glass card -->
+        <div class="hero__glass hero-anim">
+          <p class="hero__glass-label">Philosophy</p>
+          <p class="hero__glass-text">
+            Great design starts with understanding the <em>mind</em>, combining rigorous
+            research with creative intuition to build experiences that respect cognitive
+            limits and amplify human capability.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disciplines Strip -->
+  <section class="disciplines">
+    <div class="container">
+      <div class="disciplines__inner">
+        <span class="disciplines__item">UX Research</span>
+        <span class="disciplines__dot"></span>
+        <span class="disciplines__item">Product Design</span>
+        <span class="disciplines__dot"></span>
+        <span class="disciplines__item">Cognitive Science</span>
+        <span class="disciplines__dot"></span>
+        <span class="disciplines__item">Audio Design</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Work Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section__header reveal">
+        <p class="section__label">Selected Work</p>
+        <h2 class="section__title">Research & Design</h2>
+      </div>
+
+      <div class="projects-grid">
+        <!-- Project 1: Soundscapes Study -->
+        <a href="work.html#soundscapes" class="project-card reveal">
+          <div class="project-card__image">
+            <img src="assets/images/projects/soundscapes-colloquium.jpg" alt="Laith presenting Soundscapes & Cognition research at the departmental colloquium" class="project-card__img">
+          </div>
+          <div class="project-card__info">
+            <div class="project-card__tags">
+              <span class="project-card__tag">UX Research</span>
+              <span class="project-card__tag">A/B Testing</span>
+            </div>
+            <h3 class="project-card__title">Soundscapes & Cognition</h3>
+          </div>
+          <div class="project-card__overlay">
+            <div class="project-card__tags">
+              <span class="project-card__tag">UX Research</span>
+              <span class="project-card__tag">A/B Testing</span>
+              <span class="project-card__tag">Python</span>
+            </div>
+            <h3 class="project-card__title">Soundscapes & Cognition</h3>
+            <p class="project-card__desc">
+              Quantitative study measuring how environmental soundscapes impact user cognition and task performance.
+            </p>
+          </div>
+        </a>
+
+        <!-- Project 2: Rhythmic Entrainment (Upcoming) -->
+        <a href="case-studies/entrainment.html" class="project-card reveal">
+          <div class="project-card__image" style="background: linear-gradient(135deg, #050505 0%, #0a0d12 100%);">
+            <svg class="project-card__svg" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <clipPath id="screenClip">
+                  <rect x="48" y="95" width="104" height="70" rx="4"/>
+                </clipPath>
+              </defs>
+
+              <!-- Pulse rings from screen -->
+              <circle cx="100" cy="130" r="30" stroke="#22c55e" stroke-width="1" fill="none" opacity="0">
+                <animate attributeName="r" values="30;80" dur="2s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.6;0" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="100" cy="130" r="30" stroke="#22c55e" stroke-width="1" fill="none" opacity="0">
+                <animate attributeName="r" values="30;80" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.4;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="100" cy="130" r="30" stroke="#22c55e" stroke-width="1" fill="none" opacity="0">
+                <animate attributeName="r" values="30;80" dur="2s" begin="1s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.3;0" dur="2s" begin="1s" repeatCount="indefinite"/>
+              </circle>
+
+              <!-- Screen frame -->
+              <rect x="40" y="85" width="120" height="90" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+
+              <!-- Sample image inside screen -->
+              <image href="assets/images/entrainment/img_1.jpg" x="48" y="95" width="104" height="70" clip-path="url(#screenClip)" preserveAspectRatio="xMidYMid slice">
+                <animate attributeName="href" values="assets/images/entrainment/img_1.jpg;assets/images/entrainment/img_5.jpg;assets/images/entrainment/img_10.jpg;assets/images/entrainment/img_15.jpg;assets/images/entrainment/img_20.jpg;assets/images/entrainment/img_1.jpg" dur="4.5s" repeatCount="indefinite"/>
+              </image>
+
+              <!-- Screen glow on beat -->
+              <rect x="48" y="95" width="104" height="70" rx="4" fill="none" stroke="#22c55e" stroke-width="2" opacity="0">
+                <animate attributeName="opacity" values="0;0.8;0" dur="0.9s" repeatCount="indefinite"/>
+              </rect>
+
+              <!-- Connection line -->
+              <path d="M165 130 L200 130 L200 150 L220 150" stroke="rgba(34, 197, 94, 0.5)" stroke-width="2" fill="none" stroke-dasharray="4 4">
+                <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite"/>
+              </path>
+
+              <!-- Large Metronome Ring -->
+              <circle cx="300" cy="150" r="85" stroke="rgba(34, 197, 94, 0.15)" stroke-width="6" fill="none"/>
+              <circle cx="300" cy="150" r="85" stroke="rgba(34, 197, 94, 0.08)" stroke-width="20" fill="none"/>
+              <circle cx="300" cy="150" r="85" stroke="#22c55e" stroke-width="6" fill="none"
+                stroke-dasharray="534" stroke-dashoffset="400" stroke-linecap="round"
+                style="filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.6));">
+                <animateTransform attributeName="transform" type="rotate" from="0 300 150" to="360 300 150" dur="1.8s" repeatCount="indefinite"/>
+              </circle>
+
+              <!-- Inner ring glow -->
+              <circle cx="300" cy="150" r="60" stroke="rgba(34, 197, 94, 0.1)" stroke-width="2" fill="none"/>
+
+              <!-- Center beat number -->
+              <text x="300" y="160" text-anchor="middle" fill="white" font-family="system-ui" font-size="36" font-weight="700" opacity="0.95">
+                1
+                <animate attributeName="opacity" values="0.95;0.5;0.95" dur="0.9s" repeatCount="indefinite"/>
+              </text>
+              <text x="300" y="180" text-anchor="middle" fill="rgba(34, 197, 94, 0.8)" font-family="monospace" font-size="11" font-weight="500">BEAT</text>
+
+              <!-- Beat dots under screen -->
+              <circle cx="60" cy="200" r="5" fill="#22c55e">
+                <animate attributeName="opacity" values="0.2;1;0.2" dur="0.9s" repeatCount="indefinite"/>
+                <animate attributeName="r" values="4;6;4" dur="0.9s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="85" cy="200" r="4" fill="#22c55e" opacity="0.4">
+                <animate attributeName="opacity" values="0.2;1;0.2" dur="0.9s" begin="0.225s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="110" cy="200" r="4" fill="#22c55e" opacity="0.4">
+                <animate attributeName="opacity" values="0.2;1;0.2" dur="0.9s" begin="0.45s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="135" cy="200" r="4" fill="#22c55e" opacity="0.4">
+                <animate attributeName="opacity" values="0.2;1;0.2" dur="0.9s" begin="0.675s" repeatCount="indefinite"/>
+              </circle>
+
+              <!-- BPM label -->
+              <text x="97" y="225" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="11" font-weight="500">128.57 BPM</text>
+            </svg>
+          </div>
+          <div class="project-card__info">
+            <div class="project-card__tags">
+              <span class="project-card__tag">Honors Thesis</span>
+              <span class="project-card__tag">In Progress</span>
+            </div>
+            <h3 class="project-card__title">Rhythmic Entrainment</h3>
+          </div>
+          <div class="project-card__overlay">
+            <div class="project-card__tags">
+              <span class="project-card__tag">Honors Thesis</span>
+              <span class="project-card__tag">jsPsych</span>
+              <span class="project-card__tag">Memory</span>
+            </div>
+            <h3 class="project-card__title">Rhythmic Entrainment</h3>
+            <p class="project-card__desc">
+              Can techno music help us remember the order of events? Testing Dynamic Attending Theory with temporal order memory.
+            </p>
+          </div>
+        </a>
+
+        <!-- Project 3: EEG Synthesizer -->
+        <a href="case-studies/eeg-synth.html" class="project-card reveal">
+          <div class="project-card__image">
+            <img src="assets/images/synth/eeg-synth-demo.gif" alt="EEG Ambient Synth interface showing neural oscilloscope, frequency matrix, and synthesis controls" class="project-card__img">
+          </div>
+          <div class="project-card__info">
+            <div class="project-card__tags">
+              <span class="project-card__tag">Prototype</span>
+              <span class="project-card__tag">Audio</span>
+            </div>
+            <h3 class="project-card__title">EEG Synthesizer</h3>
+          </div>
+          <div class="project-card__overlay">
+            <div class="project-card__tags">
+              <span class="project-card__tag">Prototype</span>
+              <span class="project-card__tag">Audio Design</span>
+              <span class="project-card__tag">Brain-Computer Interface</span>
+            </div>
+            <h3 class="project-card__title">EEG Synthesizer</h3>
+            <p class="project-card__desc">
+              A synthesizer controlled by brainwave data, exploring the intersection of neuroscience and music production.
+            </p>
+          </div>
+        </a>
+      </div>
+
+      <div style="text-align: center; margin-top: var(--space-xl);" class="reveal">
+        <a href="work.html" class="btn btn--outline">
+          View All Projects
+          <span class="btn__arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy Section (2-col) -->
+  <section class="philosophy">
+    <div class="container">
+      <div class="philosophy__grid">
+        <div class="philosophy__left reveal">
+          <p class="section__label">Philosophy</p>
+          <h2 class="philosophy__heading">Mindful & Empathetic Design</h2>
+        </div>
+        <div class="philosophy__right reveal">
+          <p class="philosophy__body">
+            I believe great design starts with understanding the mind. By combining
+            rigorous quantitative research with creative intuition, I create experiences
+            that respect cognitive limits and amplify human capability. Every interaction
+            should feel effortless because the hard work happened in the design process.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p class="copyright">© 2025 Laith Jaroudi</p>
+      <nav class="footer-links">
+        <a href="mailto:laithjaroudi@gmail.com">Email</a>
+        <a href="https://linkedin.com/in/laithjaroudi" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="assets/Laith_Jaroudi_CV.pdf" target="_blank">CV</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/chaos-button.js"></script>
+  <script src="js/dither-background.js"></script>
+
+  <script>
+  // Text swap animation (existing)
+  window.addEventListener("load", () => {
+    const track = document.querySelector(".text-swap__track");
+    const items = document.querySelectorAll(".text-swap__item");
+
+    if (!track || items.length === 0) return;
+
+    let currentIndex = 0;
+    const totalItems = items.length;
+    let itemHeight = items[0].getBoundingClientRect().height;
+
+    // Recalculate on resize
+    window.addEventListener('resize', () => {
+      itemHeight = items[0].getBoundingClientRect().height;
+      track.style.transition = 'none';
+      track.style.transform = `translateY(-${currentIndex * itemHeight}px)`;
+    });
+
+    setInterval(() => {
+      currentIndex++;
+
+      track.style.transition = "transform 0.5s cubic-bezier(0.2, 1, 0.3, 1)";
+      track.style.transform = `translateY(-${currentIndex * itemHeight}px)`;
+
+      if (currentIndex === totalItems - 1) {
+        setTimeout(() => {
+          track.style.transition = "none";
+          currentIndex = 0;
+          track.style.transform = `translateY(0px)`;
+          void track.offsetWidth;
+        }, 500);
+      }
+    }, 2000);
+  });
+</script>
+</body>
+</html>

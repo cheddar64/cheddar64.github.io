@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporal Order Judgment Task</title>
+
+    <!-- jsPsych v7 CDN -->
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css">
+
+    <style>
+        /* Custom styles for the experiment */
+        .jspsych-content {
+            max-width: 90%;
+        }
+
+        /* Encoding phase: fixed height for landscape images */
+        .encoding-image {
+            height: 400px;
+            width: auto;
+            max-width: 90vw;
+            object-fit: contain;
+        }
+
+        /* Retrieval phase: side-by-side images with fixed height */
+        .retrieval-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 80px;
+            margin: 40px 0;
+        }
+
+        .retrieval-image-wrapper {
+            text-align: center;
+        }
+
+        .retrieval-image {
+            height: 300px;
+            width: auto;
+            max-width: 40vw;
+            object-fit: contain;
+            border: 3px solid #333;
+            border-radius: 8px;
+        }
+
+        .retrieval-label {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #333;
+        }
+
+        .instruction-text {
+            font-size: 20px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .volume-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .volume-slider-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .volume-slider {
+            width: 300px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .volume-label {
+            font-size: 18px;
+            min-width: 60px;
+        }
+
+        .volume-btn {
+            font-size: 18px;
+            padding: 15px 30px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .volume-btn:hover {
+            background-color: #45a049;
+        }
+
+        .volume-btn.playing {
+            background-color: #f44336;
+        }
+
+        .volume-btn.playing:hover {
+            background-color: #d32f2f;
+        }
+
+        .audio-status {
+            font-size: 16px;
+            color: #666;
+            margin-top: 10px;
+            min-height: 24px;
+        }
+
+        .fixation {
+            font-size: 60px;
+            font-weight: bold;
+        }
+
+        .progress-info {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Participant ID input styling */
+        .jspsych-survey-text-question {
+            margin-bottom: 20px;
+        }
+
+        .jspsych-survey-text-question input {
+            font-size: 18px;
+            padding: 10px;
+            width: 200px;
+        }
+
+        /* Questionnaire styling */
+        .questionnaire-intro {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .jspsych-survey-likert-statement {
+            font-size: 16px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .jspsych-survey-likert-opts {
+            font-size: 14px !important;
+        }
+
+        .jspsych-survey-likert-opt-label {
+            font-size: 12px !important;
+        }
+    </style>
+</head>
+<body></body>
+<script>
+    // ============================================
+    // CONFIGURATION
+    // ============================================
+
+    // Firebase Configuration - REPLACE WITH YOUR DATABASE URL
+    const FIREBASE_URL = 'https://toj-experiment-default-rtdb.firebaseio.com/';
+
+    // Timing constants (128.57 BPM = 466.67ms per beat)
+    const BEAT_DURATION = 466.67;
+    const REP_DURATION = BEAT_DURATION * 2; // 933.34ms - doubled for longer viewing
+    const IMAGES_PER_TRIAL = 10;
+    const TOTAL_TRIALS = 40;
+    const TRIALS_PER_CONDITION = 10;
+    const PRACTICE_TRIALS = 2;
+
+    // Audio files
+    const audioFiles = {
+        'sync': 'audio/techno_sync.wav',
+        'out': 'audio/techno_out.wav',
+        'ambient': 'audio/ambient.mp3',
+        'metronome': 'audio/metronome.wav'
+    };
+
+    // Generate image paths (img_1.jpg to img_400.jpg)
+    const allImages = [];
+    for (let i = 1; i <= 400; i++) {
+        allImages.push(`img/img_${i}.jpg`);
+    }
+
+    // ============================================
+    // GLOBAL VARIABLES
+    // ============================================
+    let participantId = '';
+    let sessionDate = '';
+    let experimentStartTime = '';
+    let currentVolume = 0; // Start at 0
+    let volumeTestAudio = null;
+    let volumeTestInterval = null;
+    let availableImages = [];
+    let trialCounter = 0;
+    let previousCondition = null;
+    let previousCorrect = null;
+
+    // ============================================
+    // HELPER FUNCTIONS
+    // ============================================
+
+    // Shuffle array (Fisher-Yates)
+    function shuffle(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    // Deal images from the deck (no replacement)
+    function dealImages(count) {
+        if (availableImages.length < count) {
+            // Reshuffle if we run out
+            availableImages = shuffle([...allImages]);
+        }
+        return availableImages.splice(0, count);
+    }
+
+    // Reset image deck
+    function resetImageDeck() {
+        availableImages = shuffle([...allImages]);
+    }
+
+    // Get beat strength (1-4, where 1 is strongest/downbeat)
+    function getBeatStrength(position) {
+        // Position 1, 5, 9 = downbeat (strength 1)
+        // Position 3, 7 = half-beat (strength 2)
+        // Position 2, 4, 6, 8, 10 = off-beat (strength 3-4)
+        if (position % 4 === 1) return 1;
+        if (position % 2 === 1) return 2;
+        if (position % 4 === 2) return 3;
+        return 4;
+    }
+
+    // Categorize lag
+    function getLagCategory(lag) {
+        const absLag = Math.abs(lag);
+        if (absLag <= 2) return 'short';
+        if (absLag <= 4) return 'medium';
+        return 'long';
+    }
+
+    // Send data to Firebase
+    async function sendToFirebase(data) {
+        if (FIREBASE_URL === 'YOUR_FIREBASE_DATABASE_URL_HERE') {
+            console.warn('Firebase URL not configured. Data will only be saved locally.');
+            return;
+        }
+
+        try {
+            const endpoint = `${FIREBASE_URL}/experiments/${participantId}/${Date.now()}.json`;
+            const response = await fetch(endpoint, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            console.log('Data sent to Firebase successfully');
+        } catch (error) {
+            console.error('Error sending to Firebase:', error);
+        }
+    }
+
+    // Get browser info
+    function getBrowserInfo() {
+        return {
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            language: navigator.language,
+            screenWidth: screen.width,
+            screenHeight: screen.height,
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight,
+            pixelRatio: window.devicePixelRatio
+        };
+    }
+
+    // ============================================
+    // INITIALIZE JSPSYCH
+    // ============================================
+    const jsPsych = initJsPsych({
+        on_finish: function() {
+            // Final data save
+            const allData = jsPsych.data.get().filter({task: 'response'}).values();
+
+            // Generate CSV
+            const csv = jsPsych.data.get().filter({task: 'response'}).csv();
+            const filename = `data_${participantId}_${sessionDate}.csv`;
+
+            // Download CSV
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    });
+
+    // ============================================
+    // BUILD TIMELINE
+    // ============================================
+    const timeline = [];
+
+    // Welcome screen
+    const welcome = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `
+            <div class="instruction-text">
+                <h1>Welcome to the Experiment</h1>
+                <p>Thank you for participating in this study on temporal perception and memory.</p>
+                <p>In this task, you will:</p>
+                <ol style="text-align: left;">
+                    <li>Listen to audio while viewing a sequence of images</li>
+                    <li>Then indicate which of two images appeared first</li>
+                </ol>
+                <p>The experiment will take approximately 20-25 minutes.</p>
+                <p>Please ensure you are in a quiet environment with headphones.</p>
+            </div>
+        `,
+        choices: ['Continue']
+    };
+    timeline.push(welcome);
+
+    // Participant ID collection
+    const getParticipantId = {
+        type: jsPsychSurveyText,
+        questions: [
+            {
+                prompt: '<p style="font-size: 20px;">Please enter your Participant ID:</p>',
+                name: 'participant_id',
+                required: true,
+                placeholder: 'e.g., P001'
+            }
+        ],
+        on_finish: function(data) {
+            participantId = data.response.participant_id.trim().toUpperCase();
+            sessionDate = new Date().toISOString().split('T')[0];
+            experimentStartTime = new Date().toISOString();
+        }
+    };
+    timeline.push(getParticipantId);
+
+    // Volume check screen
+    const volumeCheck = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: function() {
+            return `
+                <div class="instruction-text">
+                    <h2>Volume Calibration</h2>
+                    <p>Please adjust your volume to a comfortable level.</p>
+                    <p>Use the slider below to set your volume, then click "Play Audio" to test.</p>
+
+                    <div class="volume-container">
+                        <div class="volume-slider-wrapper">
+                            <span class="volume-label">Volume:</span>
+                            <input type="range" min="0" max="100" value="0" class="volume-slider" id="volumeSlider">
+                            <span class="volume-label" id="volumeValue">0%</span>
+                        </div>
+                        <button class="volume-btn" id="playTestBtn" onclick="toggleVolumeTest()">Play Audio</button>
+                        <p class="audio-status" id="audioStatus"></p>
+                    </div>
+
+                    <p>When you are satisfied with the volume, click Continue.</p>
+                </div>
+            `;
+        },
+        choices: ['Continue'],
+        on_load: function() {
+            // Set up volume slider
+            const slider = document.getElementById('volumeSlider');
+            const volumeValue = document.getElementById('volumeValue');
+
+            slider.addEventListener('input', function() {
+                currentVolume = this.value / 100;
+                volumeValue.textContent = this.value + '%';
+                if (volumeTestAudio) {
+                    volumeTestAudio.volume = currentVolume;
+                }
+            });
+
+            // Preload the test audio
+            volumeTestAudio = new Audio(audioFiles['sync']);
+            volumeTestAudio.volume = currentVolume;
+        },
+        on_finish: function() {
+            // Stop any playing audio
+            if (volumeTestAudio) {
+                volumeTestAudio.pause();
+                volumeTestAudio = null;
+            }
+            if (volumeTestInterval) {
+                clearInterval(volumeTestInterval);
+                volumeTestInterval = null;
+            }
+        }
+    };
+    timeline.push(volumeCheck);
+
+    // Volume test toggle function (global)
+    window.toggleVolumeTest = function() {
+        const btn = document.getElementById('playTestBtn');
+        const status = document.getElementById('audioStatus');
+
+        if (volumeTestAudio && !volumeTestAudio.paused) {
+            // Stop audio
+            volumeTestAudio.pause();
+            volumeTestAudio.currentTime = 0;
+            btn.textContent = 'Play Audio';
+            btn.classList.remove('playing');
+            status.textContent = 'Audio stopped';
+            if (volumeTestInterval) {
+                clearInterval(volumeTestInterval);
+                volumeTestInterval = null;
+            }
+        } else {
+            // Play audio for 10 seconds
+            volumeTestAudio = new Audio(audioFiles['sync']);
+            volumeTestAudio.volume = currentVolume;
+            volumeTestAudio.play();
+            btn.textContent = 'Stop Audio';
+            btn.classList.add('playing');
+
+            let countdown = 10;
+            status.textContent = `Playing... ${countdown}s remaining`;
+
+            volumeTestInterval = setInterval(function() {
+                countdown--;
+                if (countdown > 0) {
+                    status.textContent = `Playing... ${countdown}s remaining`;
+                } else {
+                    // Stop after 10 seconds
+                    volumeTestAudio.pause();
+                    volumeTestAudio.currentTime = 0;
+                    btn.textContent = 'Play Audio';
+                    btn.classList.remove('playing');
+                    status.textContent = 'Audio finished - adjust volume and play again if needed';
+                    clearInterval(volumeTestInterval);
+                    volumeTestInterval = null;
+                }
+            }, 1000);
+
+            // Also handle if audio ends naturally
+            volumeTestAudio.onended = function() {
+                btn.textContent = 'Play Audio';
+                btn.classList.remove('playing');
+                status.textContent = 'Audio finished - adjust volume and play again if needed';
+                if (volumeTestInterval) {
+                    clearInterval(volumeTestInterval);
+                    volumeTestInterval = null;
+                }
+            };
+        }
+    };
+
+    // Instructions
+    const instructions = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `
+            <div class="instruction-text">
+                <h2>Instructions</h2>
+                <p>On each trial:</p>
+                <ol style="text-align: left;">
+                    <li>You will see a <strong>+</strong> fixation cross - focus on it</li>
+                    <li>A sequence of <strong>10 images</strong> will appear while audio plays</li>
+                    <li>Pay attention to the <strong>order</strong> of the images</li>
+                    <li>After the sequence, two images will appear side by side</li>
+                    <li>Press <strong>F</strong> if the LEFT image appeared first</li>
+                    <li>Press <strong>J</strong> if the RIGHT image appeared first</li>
+                </ol>
+                <p>Try to respond as <strong>quickly and accurately</strong> as possible.</p>
+                <p>We will start with ${PRACTICE_TRIALS} practice trials.</p>
+            </div>
+        `,
+        choices: ['Start Practice']
+    };
+    timeline.push(instructions);
+
+    // Reset image deck before practice
+    const resetBeforePractice = {
+        type: jsPsychCallFunction,
+        func: function() {
+            resetImageDeck();
+            trialCounter = 0;
+        }
+    };
+    timeline.push(resetBeforePractice);
+
+    // ============================================
+    // TRIAL PROCEDURE FACTORY
+    // ============================================
+    function createTrialProcedure(condition, isPractice = false) {
+        const procedure = [];
+
+        // Trial variables (set at start of trial)
+        let trialImages = [];
+        let targetPosition, distractorPosition;
+        let targetImage, distractorImage;
+        let audioElement = null;
+        let trialStartTime;
+        let audioStartTime;
+        let syncOffset;
+
+        // Fixation
+        procedure.push({
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: '<div class="fixation">+</div>',
+            choices: "NO_KEYS",
+            trial_duration: 1000,
+            on_start: function() {
+                trialStartTime = performance.now();
+                trialCounter++;
+
+                // Deal images for this trial
+                trialImages = dealImages(IMAGES_PER_TRIAL);
+
+                // Select target and distractor positions (1-10)
+                const positions = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+                targetPosition = positions[0];
+                distractorPosition = positions[1];
+
+                // Ensure they're not adjacent for easier discrimination
+                while (Math.abs(targetPosition - distractorPosition) < 2) {
+                    const newPositions = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+                    targetPosition = newPositions[0];
+                    distractorPosition = newPositions[1];
+                }
+
+                // Ensure target comes before distractor (for "which came first" question)
+                if (targetPosition > distractorPosition) {
+                    [targetPosition, distractorPosition] = [distractorPosition, targetPosition];
+                }
+
+                targetImage = trialImages[targetPosition - 1];
+                distractorImage = trialImages[distractorPosition - 1];
+
+                // Preload audio
+                audioElement = new Audio(audioFiles[condition]);
+                audioElement.volume = currentVolume;
+            }
+        });
+
+        // Encoding phase - show each image
+        for (let i = 0; i < IMAGES_PER_TRIAL; i++) {
+            procedure.push({
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: function() {
+                    return `<img src="${trialImages[i]}" class="encoding-image">`;
+                },
+                choices: "NO_KEYS",
+                trial_duration: REP_DURATION,
+                on_start: function() {
+                    // Start audio on first image
+                    if (i === 0) {
+                        audioStartTime = performance.now();
+
+                        // For 'out' condition, delay audio by half a beat so kick lands mid-image
+                        if (condition === 'out') {
+                            const outOfSyncDelay = BEAT_DURATION / 2; // ~233ms offset
+                            setTimeout(() => {
+                                audioElement.play();
+                            }, outOfSyncDelay);
+                            syncOffset = outOfSyncDelay;
+                        } else {
+                            audioElement.play();
+                            syncOffset = 0;
+                        }
+                    }
+                },
+                on_finish: function() {
+                    // Stop audio after last image
+                    if (i === IMAGES_PER_TRIAL - 1) {
+                        audioElement.pause();
+                        audioElement = null;
+                    }
+                }
+            });
+        }
+
+        // Brief blank screen before retrieval
+        procedure.push({
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: '',
+            choices: "NO_KEYS",
+            trial_duration: 500
+        });
+
+        // Retrieval phase - 2AFC
+        procedure.push({
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: function() {
+                // Randomly assign left/right positions
+                const targetOnLeft = Math.random() < 0.5;
+                const leftImage = targetOnLeft ? targetImage : distractorImage;
+                const rightImage = targetOnLeft ? distractorImage : targetImage;
+
+                // Store for response evaluation
+                jsPsych.data.addProperties({
+                    temp_targetOnLeft: targetOnLeft,
+                    temp_leftImage: leftImage,
+                    temp_rightImage: rightImage
+                });
+
+                return `
+                    <p style="font-size: 24px; margin-bottom: 20px;">Which image appeared <strong>FIRST</strong>?</p>
+                    <div class="retrieval-container">
+                        <div class="retrieval-image-wrapper">
+                            <img src="${leftImage}" class="retrieval-image">
+                            <div class="retrieval-label">F = Left</div>
+                        </div>
+                        <div class="retrieval-image-wrapper">
+                            <img src="${rightImage}" class="retrieval-image">
+                            <div class="retrieval-label">J = Right</div>
+                        </div>
+                    </div>
+                `;
+            },
+            choices: ['f', 'j'],
+            on_finish: function(data) {
+                // Get stored values
+                const targetOnLeft = data.temp_targetOnLeft;
+                const leftImage = data.temp_leftImage;
+                const rightImage = data.temp_rightImage;
+
+                // Evaluate response
+                const response = data.response;
+                const choseLeft = response === 'f';
+                const correct = (choseLeft && targetOnLeft) || (!choseLeft && !targetOnLeft);
+
+                // Calculate lag
+                const lag = distractorPosition - targetPosition;
+
+                // Build comprehensive trial data
+                const trialData = {
+                    // Identifiers
+                    participant_id: participantId,
+                    session_date: sessionDate,
+                    trial_number: trialCounter,
+                    block_number: Math.ceil(trialCounter / 10),
+                    trial_in_block: ((trialCounter - 1) % 10) + 1,
+
+                    // Condition and response
+                    condition: condition,
+                    accuracy: correct ? 1 : 0,
+                    reaction_time: data.rt,
+                    response_side: choseLeft ? 'left' : 'right',
+                    correct_answer: targetOnLeft ? 'left' : 'right',
+
+                    // Position information
+                    target_position: targetPosition,
+                    distractor_position: distractorPosition,
+                    lag: lag,
+                    lag_category: getLagCategory(lag),
+                    target_beat_strength: getBeatStrength(targetPosition),
+                    distractor_beat_strength: getBeatStrength(distractorPosition),
+                    chosen_position: choseLeft ?
+                        (targetOnLeft ? targetPosition : distractorPosition) :
+                        (targetOnLeft ? distractorPosition : targetPosition),
+
+                    // Image information
+                    target_side: targetOnLeft ? 'left' : 'right',
+                    target_filename: targetImage,
+                    distractor_filename: distractorImage,
+                    left_image: leftImage,
+                    right_image: rightImage,
+                    sequence_filenames: trialImages.join(';'),
+
+                    // Trial history
+                    previous_condition: previousCondition,
+                    previous_correct: previousCorrect,
+
+                    // Timing and sync
+                    sync_offset_ms: syncOffset,
+                    audio_duration_actual_ms: IMAGES_PER_TRIAL * REP_DURATION,
+                    expected_encoding_duration_ms: IMAGES_PER_TRIAL * REP_DURATION,
+                    rep_duration_ms: REP_DURATION,
+
+                    // Session info
+                    volume_level: currentVolume,
+                    experiment_start_time: experimentStartTime,
+                    trial_start_time: new Date().toISOString(),
+                    window_resolution: `${window.innerWidth}x${window.innerHeight}`,
+                    browser_info: JSON.stringify(getBrowserInfo()),
+
+                    // Flags
+                    is_practice: isPractice,
+                    phase: isPractice ? 'practice' : 'main',
+                    task: 'response'
+                };
+
+                // Update data
+                data.trial_data = trialData;
+                Object.assign(data, trialData);
+
+                // Update history
+                previousCondition = condition;
+                previousCorrect = correct;
+
+                // Send to Firebase (non-blocking)
+                if (!isPractice) {
+                    sendToFirebase(trialData);
+                }
+            }
+        });
+
+        // Feedback (practice only)
+        if (isPractice) {
+            procedure.push({
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: function() {
+                    const lastTrial = jsPsych.data.get().last(1).values()[0];
+                    const correct = lastTrial.accuracy === 1;
+                    return `
+                        <div style="font-size: 48px; color: ${correct ? 'green' : 'red'};">
+                            ${correct ? 'Correct!' : 'Incorrect'}
+                        </div>
+                    `;
+                },
+                choices: "NO_KEYS",
+                trial_duration: 1000
+            });
+        }
+
+        return procedure;
+    }
+
+    // ============================================
+    // PRACTICE TRIALS
+    // ============================================
+    const practiceConditions = shuffle(['sync', 'ambient']);
+    for (let i = 0; i < PRACTICE_TRIALS; i++) {
+        const trialProcedure = createTrialProcedure(practiceConditions[i % practiceConditions.length], true);
+        trialProcedure.forEach(step => timeline.push(step));
+    }
+
+    // Transition to main experiment
+    const transitionToMain = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `
+            <div class="instruction-text">
+                <h2>Practice Complete!</h2>
+                <p>Great job! You have completed the practice trials.</p>
+                <p>Now we will begin the main experiment.</p>
+                <p>Remember:</p>
+                <ul style="text-align: left;">
+                    <li>Press <strong>F</strong> if the LEFT image appeared first</li>
+                    <li>Press <strong>J</strong> if the RIGHT image appeared first</li>
+                </ul>
+                <p>There will be ${TOTAL_TRIALS} trials with short breaks.</p>
+                <p>You will no longer receive feedback on your responses.</p>
+            </div>
+        `,
+        choices: ['Begin Experiment']
+    };
+    timeline.push(transitionToMain);
+
+    // Reset for main experiment
+    const resetForMain = {
+        type: jsPsychCallFunction,
+        func: function() {
+            resetImageDeck();
+            trialCounter = 0;
+            previousCondition = null;
+            previousCorrect = null;
+        }
+    };
+    timeline.push(resetForMain);
+
+    // ============================================
+    // MAIN EXPERIMENT TRIALS
+    // ============================================
+    // Create balanced trial list
+    const mainConditions = [];
+    for (let i = 0; i < TRIALS_PER_CONDITION; i++) {
+        mainConditions.push('sync', 'out', 'ambient', 'metronome');
+    }
+    const shuffledConditions = shuffle(mainConditions);
+
+    // Add trials with breaks
+    for (let i = 0; i < TOTAL_TRIALS; i++) {
+        // Add break every 10 trials (except at start)
+        if (i > 0 && i % 10 === 0) {
+            const breakScreen = {
+                type: jsPsychHtmlButtonResponse,
+                stimulus: function() {
+                    const trialsComplete = i;
+                    const trialsRemaining = TOTAL_TRIALS - i;
+                    return `
+                        <div class="instruction-text">
+                            <h2>Break Time</h2>
+                            <p>You have completed ${trialsComplete} of ${TOTAL_TRIALS} trials.</p>
+                            <p>${trialsRemaining} trials remaining.</p>
+                            <p>Take a moment to rest your eyes if needed.</p>
+                            <p>Press Continue when you're ready.</p>
+                        </div>
+                    `;
+                },
+                choices: ['Continue']
+            };
+            timeline.push(breakScreen);
+        }
+
+        // Add trial
+        const condition = shuffledConditions[i];
+        const trialProcedure = createTrialProcedure(condition, false);
+        trialProcedure.forEach(step => timeline.push(step));
+    }
+
+    // ============================================
+    // QUESTIONNAIRES
+    // ============================================
+
+    // Questionnaire introduction
+    const questionnaireIntro = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `
+            <div class="instruction-text">
+                <h2>Questionnaires</h2>
+                <p>Thank you for completing the memory task!</p>
+                <p>Now we have a few short questionnaires for you to complete.</p>
+                <p>These assess individual differences that may relate to task performance.</p>
+                <p>Please answer honestly - there are no right or wrong answers.</p>
+            </div>
+        `,
+        choices: ['Continue']
+    };
+    timeline.push(questionnaireIntro);
+
+    // ----------------------------------------
+    // STAI-6: State-Trait Anxiety Inventory (6-item short form)
+    // Marteau & Bekker (1992)
+    // ----------------------------------------
+    const stai6_scale = [
+        "Not at all",
+        "Somewhat",
+        "Moderately",
+        "Very much so"
+    ];
+
+    const stai6 = {
+        type: jsPsychSurveyLikert,
+        preamble: `
+            <div class="questionnaire-intro">
+                <h3>How do you feel RIGHT NOW?</h3>
+                <p>Please indicate how much each statement describes your current feelings.</p>
+            </div>
+        `,
+        questions: [
+            {prompt: "I feel calm", name: 'stai_1_calm', labels: stai6_scale, required: true},
+            {prompt: "I am tense", name: 'stai_2_tense', labels: stai6_scale, required: true},
+            {prompt: "I feel upset", name: 'stai_3_upset', labels: stai6_scale, required: true},
+            {prompt: "I am relaxed", name: 'stai_4_relaxed', labels: stai6_scale, required: true},
+            {prompt: "I feel content", name: 'stai_5_content', labels: stai6_scale, required: true},
+            {prompt: "I am worried", name: 'stai_6_worried', labels: stai6_scale, required: true}
+        ],
+        randomize_question_order: false,
+        on_finish: function(data) {
+            // Score STAI-6 (reverse score items 1, 4, 5 - calm, relaxed, content)
+            const responses = data.response;
+            // Items are 0-indexed (0-3), convert to 1-4 scale
+            const calm = 4 - responses.stai_1_calm; // reverse
+            const tense = responses.stai_2_tense + 1;
+            const upset = responses.stai_3_upset + 1;
+            const relaxed = 4 - responses.stai_4_relaxed; // reverse
+            const content = 4 - responses.stai_5_content; // reverse
+            const worried = responses.stai_6_worried + 1;
+
+            // Calculate prorated score (multiply by 20/6 to get 20-80 range)
+            const rawSum = calm + tense + upset + relaxed + content + worried;
+            const stai6_total = (rawSum * 20) / 6;
+
+            data.stai6_total = stai6_total;
+            data.questionnaire = 'STAI-6';
+
+            // Send to Firebase
+            sendToFirebase({
+                participant_id: participantId,
+                questionnaire: 'STAI-6',
+                stai6_total: stai6_total,
+                responses: responses,
+                timestamp: new Date().toISOString()
+            });
+        }
+    };
+    timeline.push(stai6);
+
+    // ----------------------------------------
+    // ACS: Attentional Control Scale (20 items)
+    // Derryberry & Reed (2002)
+    // ----------------------------------------
+    const acs_scale = [
+        "Almost never",
+        "Sometimes",
+        "Often",
+        "Always"
+    ];
+
+    const acs = {
+        type: jsPsychSurveyLikert,
+        preamble: `
+            <div class="questionnaire-intro">
+                <h3>Attentional Control Scale</h3>
+                <p>Please indicate how often each statement applies to you.</p>
+            </div>
+        `,
+        questions: [
+            {prompt: "It's very hard for me to concentrate on a difficult task when there are noises around.", name: 'acs_1', labels: acs_scale, required: true},
+            {prompt: "When I need to concentrate and solve a problem, I have trouble focusing my attention.", name: 'acs_2', labels: acs_scale, required: true},
+            {prompt: "When I am working hard on something, I still get distracted by events around me.", name: 'acs_3', labels: acs_scale, required: true},
+            {prompt: "My concentration is good even if there is music in the room around me.", name: 'acs_4', labels: acs_scale, required: true},
+            {prompt: "When concentrating, I can focus my attention so that I become unaware of what's going on in the room around me.", name: 'acs_5', labels: acs_scale, required: true},
+            {prompt: "When I am reading or studying, I am easily distracted if there are people talking in the same room.", name: 'acs_6', labels: acs_scale, required: true},
+            {prompt: "When trying to focus my attention on something, I have difficulty blocking out distracting thoughts.", name: 'acs_7', labels: acs_scale, required: true},
+            {prompt: "I have a hard time concentrating when I'm excited about something.", name: 'acs_8', labels: acs_scale, required: true},
+            {prompt: "When concentrating I ignore feelings of hunger or thirst.", name: 'acs_9', labels: acs_scale, required: true},
+            {prompt: "I can quickly switch from one task to another.", name: 'acs_10', labels: acs_scale, required: true},
+            {prompt: "It takes me a while to get really involved in a new task.", name: 'acs_11', labels: acs_scale, required: true},
+            {prompt: "It is difficult for me to coordinate my attention between the listening and writing required when taking notes during lectures.", name: 'acs_12', labels: acs_scale, required: true},
+            {prompt: "I can become interested in a new topic very quickly when I need to.", name: 'acs_13', labels: acs_scale, required: true},
+            {prompt: "It is easy for me to read or write while I'm also talking on the phone.", name: 'acs_14', labels: acs_scale, required: true},
+            {prompt: "I have trouble carrying on two conversations at once.", name: 'acs_15', labels: acs_scale, required: true},
+            {prompt: "I have a hard time coming up with new ideas quickly.", name: 'acs_16', labels: acs_scale, required: true},
+            {prompt: "After being interrupted or distracted, I can easily shift my attention back to what I was doing before.", name: 'acs_17', labels: acs_scale, required: true},
+            {prompt: "When a distracting thought comes to mind, it is easy for me to shift my attention away from it.", name: 'acs_18', labels: acs_scale, required: true},
+            {prompt: "It is easy for me to alternate between two different tasks.", name: 'acs_19', labels: acs_scale, required: true},
+            {prompt: "It is hard for me to break from one way of thinking about something and look at it from another point of view.", name: 'acs_20', labels: acs_scale, required: true}
+        ],
+        randomize_question_order: false,
+        on_finish: function(data) {
+            const responses = data.response;
+            // Reverse scored items: 1,2,3,6,7,8,11,12,15,16,20 (0-indexed: 0,1,2,5,6,7,10,11,14,15,19)
+            const reverseItems = [0, 1, 2, 5, 6, 7, 10, 11, 14, 15, 19];
+
+            let focusingScore = 0; // Items 1-9
+            let shiftingScore = 0; // Items 10-20
+            let totalScore = 0;
+
+            for (let i = 0; i < 20; i++) {
+                const itemKey = `acs_${i + 1}`;
+                let score = responses[itemKey] + 1; // Convert 0-3 to 1-4
+
+                // Reverse score if needed
+                if (reverseItems.includes(i)) {
+                    score = 5 - score;
+                }
+
+                totalScore += score;
+                if (i < 9) {
+                    focusingScore += score;
+                } else {
+                    shiftingScore += score;
+                }
+            }
+
+            data.acs_total = totalScore;
+            data.acs_focusing = focusingScore;
+            data.acs_shifting = shiftingScore;
+            data.questionnaire = 'ACS';
+
+            // Send to Firebase
+            sendToFirebase({
+                participant_id: participantId,
+                questionnaire: 'ACS',
+                acs_total: totalScore,
+                acs_focusing: focusingScore,
+                acs_shifting: shiftingScore,
+                responses: responses,
+                timestamp: new Date().toISOString()
+            });
+        }
+    };
+    timeline.push(acs);
+
+    // ----------------------------------------
+    // Gold-MSI: Goldsmiths Musical Sophistication Index (38 items)
+    // Mullensiefen et al. (2014)
+    // ----------------------------------------
+    const goldmsi_agreement_scale = [
+        "Completely disagree",
+        "Strongly disagree",
+        "Disagree",
+        "Neither agree nor disagree",
+        "Agree",
+        "Strongly agree",
+        "Completely agree"
+    ];
+
+    // Gold-MSI Part 1: Agreement items (31 items)
+    const goldmsi_part1 = {
+        type: jsPsychSurveyLikert,
+        preamble: `
+            <div class="questionnaire-intro">
+                <h3>Musical Sophistication Index (Part 1 of 2)</h3>
+                <p>Please indicate your level of agreement with each statement.</p>
+            </div>
+        `,
+        questions: [
+            // Active Engagement (9 items)
+            {prompt: "I spend a lot of my free time doing music-related activities.", name: 'goldmsi_1', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I enjoy writing about music, for example on blogs and forums.", name: 'goldmsi_2', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "If somebody starts singing a song I don't know, I can usually join in.", name: 'goldmsi_3', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I am able to hit the right notes when I sing along with a recording.", name: 'goldmsi_4', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I can sing or play music from memory.", name: 'goldmsi_5', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I often read or search the internet for things related to music.", name: 'goldmsi_6', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I am not able to sing in harmony when somebody is singing a familiar tune.", name: 'goldmsi_7', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I don't spend much of my disposable income on music.", name: 'goldmsi_8', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "Music is kind of an addiction for me: I couldn't live without it.", name: 'goldmsi_9', labels: goldmsi_agreement_scale, required: true},
+
+            // Perceptual Abilities (9 items)
+            {prompt: "I can tell when people sing or play out of tune.", name: 'goldmsi_10', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I am able to judge whether someone is a good singer or not.", name: 'goldmsi_11', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I usually know when I'm hearing a song for the first time.", name: 'goldmsi_12', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I find it difficult to spot mistakes in a performance of a song even if I know the tune.", name: 'goldmsi_13', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I can tell when people sing or play in time with the beat.", name: 'goldmsi_14', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I can recognize a familiar song from just the melody.", name: 'goldmsi_15', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I have trouble recognizing a familiar song when played in a different way or by a different performer.", name: 'goldmsi_16', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I can tell when music is not played exactly in time.", name: 'goldmsi_17', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "When I hear a piece of music I can usually identify its genre.", name: 'goldmsi_18', labels: goldmsi_agreement_scale, required: true},
+
+            // Singing Abilities (7 items)
+            {prompt: "After hearing a new song two or three times, I can usually sing it by myself.", name: 'goldmsi_19', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I am able to identify what is special about a given musical piece.", name: 'goldmsi_20', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I am not very accurate at keeping time to the beat of a piece of music.", name: 'goldmsi_21', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I am able to hit the right notes when I sing by myself.", name: 'goldmsi_22', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I can compare and discuss differences between two performances or versions of the same piece of music.", name: 'goldmsi_23', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I have no idea what is happening in a piece of music.", name: 'goldmsi_24', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "When I sing, I have no idea whether I'm in tune or not.", name: 'goldmsi_25', labels: goldmsi_agreement_scale, required: true},
+
+            // Emotions (6 items)
+            {prompt: "I sometimes choose music that can trigger shivers down my spine.", name: 'goldmsi_26', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "Pieces of music rarely evoke emotions for me.", name: 'goldmsi_27', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I often pick certain music to motivate or excite me.", name: 'goldmsi_28', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I am able to talk about the emotions that a piece of music evokes for me.", name: 'goldmsi_29', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "Music can evoke my memories of past people and places.", name: 'goldmsi_30', labels: goldmsi_agreement_scale, required: true},
+            {prompt: "I keep track of new music that I come across.", name: 'goldmsi_31', labels: goldmsi_agreement_scale, required: true}
+        ],
+        randomize_question_order: false,
+        on_finish: function(data) {
+            data.questionnaire = 'Gold-MSI-Part1';
+        }
+    };
+    timeline.push(goldmsi_part1);
+
+    // Gold-MSI Part 2: Musical Training items (7 ordinal items)
+    const goldmsi_part2 = {
+        type: jsPsychSurveyLikert,
+        preamble: `
+            <div class="questionnaire-intro">
+                <h3>Musical Sophistication Index (Part 2 of 2)</h3>
+                <p>Please answer the following questions about your musical background.</p>
+            </div>
+        `,
+        questions: [
+            {
+                prompt: "I have had formal training in music theory for...",
+                name: 'goldmsi_32',
+                labels: ["0 years", "1 year", "2 years", "3 years", "4-5 years", "6-9 years", "10 or more years"],
+                required: true
+            },
+            {
+                prompt: "I have had training in playing a musical instrument (including voice) for...",
+                name: 'goldmsi_33',
+                labels: ["0 years", "1 year", "2 years", "3 years", "4-5 years", "6-9 years", "10 or more years"],
+                required: true
+            },
+            {
+                prompt: "I practice a musical instrument (including voice)...",
+                name: 'goldmsi_34',
+                labels: ["0 hours per day", "0.5 hours", "1 hour", "1.5 hours", "2 hours", "3-4 hours", "5 or more hours per day"],
+                required: true
+            },
+            {
+                prompt: "At my peak of interest I practiced my primary instrument for...",
+                name: 'goldmsi_35',
+                labels: ["0 hours per day", "0.5 hours", "1 hour", "1.5 hours", "2 hours", "3-4 hours", "5 or more hours per day"],
+                required: true
+            },
+            {
+                prompt: "I can play...",
+                name: 'goldmsi_36',
+                labels: ["0 instruments", "1 instrument", "2 instruments", "3 instruments", "4 instruments", "5 instruments", "6 or more instruments"],
+                required: true
+            },
+            {
+                prompt: "I listen attentively to music for...",
+                name: 'goldmsi_37',
+                labels: ["0-15 min per day", "15-30 min", "30-60 min", "60-90 min", "2 hours", "2-3 hours", "4 or more hours per day"],
+                required: true
+            },
+            {
+                prompt: "I engaged in regular, daily practice of a musical instrument (including voice) for...",
+                name: 'goldmsi_38',
+                labels: ["0 years", "1 year", "2 years", "3-5 years", "6-9 years", "10 or more years", "I still practice"],
+                required: true
+            }
+        ],
+        randomize_question_order: false,
+        on_finish: function(data) {
+            // Combine with Part 1 data and calculate subscale scores
+            const part1Data = jsPsych.data.get().filter({questionnaire: 'Gold-MSI-Part1'}).last(1).values()[0];
+            const part1Responses = part1Data.response;
+            const part2Responses = data.response;
+
+            // Reverse scored items (0-indexed in responses): 7, 8 (negatively worded in Active Engagement)
+            // 13, 16 (Perceptual), 21, 24, 25 (Singing), 27 (Emotions)
+            const reverseItems = ['goldmsi_7', 'goldmsi_8', 'goldmsi_13', 'goldmsi_16', 'goldmsi_21', 'goldmsi_24', 'goldmsi_25', 'goldmsi_27'];
+
+            // Calculate subscale scores
+            // Active Engagement: items 1-9
+            let activeEngagement = 0;
+            for (let i = 1; i <= 9; i++) {
+                let score = part1Responses[`goldmsi_${i}`] + 1;
+                if (reverseItems.includes(`goldmsi_${i}`)) score = 8 - score;
+                activeEngagement += score;
+            }
+
+            // Perceptual Abilities: items 10-18
+            let perceptualAbilities = 0;
+            for (let i = 10; i <= 18; i++) {
+                let score = part1Responses[`goldmsi_${i}`] + 1;
+                if (reverseItems.includes(`goldmsi_${i}`)) score = 8 - score;
+                perceptualAbilities += score;
+            }
+
+            // Singing Abilities: items 19-25
+            let singingAbilities = 0;
+            for (let i = 19; i <= 25; i++) {
+                let score = part1Responses[`goldmsi_${i}`] + 1;
+                if (reverseItems.includes(`goldmsi_${i}`)) score = 8 - score;
+                singingAbilities += score;
+            }
+
+            // Emotions: items 26-31
+            let emotions = 0;
+            for (let i = 26; i <= 31; i++) {
+                let score = part1Responses[`goldmsi_${i}`] + 1;
+                if (reverseItems.includes(`goldmsi_${i}`)) score = 8 - score;
+                emotions += score;
+            }
+
+            // Musical Training: items 32-38
+            let musicalTraining = 0;
+            for (let i = 32; i <= 38; i++) {
+                musicalTraining += part2Responses[`goldmsi_${i}`] + 1;
+            }
+
+            // General Musical Sophistication (uses 18 specific items - simplified here as sum of subscales)
+            const generalSophistication = activeEngagement + perceptualAbilities + singingAbilities + emotions + musicalTraining;
+
+            data.goldmsi_active_engagement = activeEngagement;
+            data.goldmsi_perceptual_abilities = perceptualAbilities;
+            data.goldmsi_singing_abilities = singingAbilities;
+            data.goldmsi_emotions = emotions;
+            data.goldmsi_musical_training = musicalTraining;
+            data.goldmsi_general = generalSophistication;
+            data.questionnaire = 'Gold-MSI-Part2';
+
+            // Send to Firebase
+            sendToFirebase({
+                participant_id: participantId,
+                questionnaire: 'Gold-MSI',
+                goldmsi_active_engagement: activeEngagement,
+                goldmsi_perceptual_abilities: perceptualAbilities,
+                goldmsi_singing_abilities: singingAbilities,
+                goldmsi_emotions: emotions,
+                goldmsi_musical_training: musicalTraining,
+                goldmsi_general: generalSophistication,
+                part1_responses: part1Responses,
+                part2_responses: part2Responses,
+                timestamp: new Date().toISOString()
+            });
+        }
+    };
+    timeline.push(goldmsi_part2);
+
+    // ============================================
+    // END SCREEN
+    // ============================================
+    const endScreen = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: function() {
+            const responseData = jsPsych.data.get().filter({task: 'response', is_practice: false});
+            const accuracy = responseData.select('accuracy').mean() * 100;
+            const meanRT = responseData.select('reaction_time').mean();
+
+            return `
+                <div class="instruction-text">
+                    <h1>Experiment Complete!</h1>
+                    <p>Thank you for participating!</p>
+                    <h3>Your Performance:</h3>
+                    <p>Accuracy: ${accuracy.toFixed(1)}%</p>
+                    <p>Average Response Time: ${meanRT.toFixed(0)} ms</p>
+                    <p>Your data has been saved.</p>
+                    <p>You may now close this window.</p>
+                </div>
+            `;
+        },
+        choices: ['Finish']
+    };
+    timeline.push(endScreen);
+
+    // ============================================
+    // PRELOAD AND RUN
+    // ============================================
+    // Preload all assets
+    const preload = {
+        type: jsPsychPreload,
+        images: allImages,
+        audio: Object.values(audioFiles),
+        show_progress_bar: true,
+        message: 'Loading experiment assets...',
+        show_detailed_errors: true
+    };
+
+    // Run experiment
+    jsPsych.run([preload, ...timeline]);
+</script>
+</html>

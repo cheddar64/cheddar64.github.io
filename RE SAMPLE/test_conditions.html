@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Condition Test - TOJ Experiment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 900px;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #eee;
+        }
+
+        .condition-label {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 10px 30px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .condition-label.sync { background: #4CAF50; }
+        .condition-label.out { background: #f44336; }
+        .condition-label.ambient { background: #2196F3; }
+        .condition-label.metronome { background: #FF9800; }
+
+        .image-container {
+            width: 600px;
+            height: 400px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .fixation {
+            font-size: 80px;
+            color: #fff;
+        }
+
+        .progress {
+            font-size: 18px;
+            color: #888;
+            margin-top: 15px;
+        }
+
+        .controls {
+            margin-top: 30px;
+        }
+
+        button {
+            font-size: 20px;
+            padding: 15px 40px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background: #4CAF50;
+            color: white;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        button:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+
+        .volume-control {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .volume-control input {
+            width: 200px;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .info code {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Condition Test</h1>
+
+        <div id="conditionLabel" class="condition-label" style="display: none;"></div>
+
+        <div class="image-container">
+            <div id="display">
+                <p>Press "Start Test" to begin</p>
+            </div>
+        </div>
+
+        <div class="progress" id="progress"></div>
+
+        <div class="volume-control">
+            <label>Volume:</label>
+            <input type="range" id="volume" min="0" max="100" value="50">
+            <span id="volumeValue">50%</span>
+        </div>
+
+        <div class="controls">
+            <button id="startBtn" onclick="startTest()">Start Test</button>
+            <button id="skipBtn" onclick="skipToNext()" disabled>Skip to Next Condition</button>
+        </div>
+
+        <div class="info">
+            <strong>Conditions:</strong><br>
+            <code>sync</code> - Techno music, kick on image transitions<br>
+            <code>out</code> - Techno music, kick offset by half-beat (~233ms) - lands mid-image<br>
+            <code>ambient</code> - Ambient music (no beat)<br>
+            <code>metronome</code> - Metronome clicks only
+        </div>
+    </div>
+
+    <script>
+        // Timing constants (same as main experiment)
+        const BEAT_DURATION = 466.67; // 128.57 BPM
+        const REP_DURATION = BEAT_DURATION * 2; // 933.34ms per image
+        const IMAGES_PER_TRIAL = 10;
+
+        // Conditions to test
+        const conditions = ['sync', 'out', 'ambient', 'metronome'];
+        let currentConditionIndex = 0;
+        let currentImageIndex = 0;
+        let trialImages = [];
+        let audioElement = null;
+        let imageInterval = null;
+        let isRunning = false;
+
+        // Audio files
+        const audioFiles = {
+            'sync': 'audio/techno_sync.wav',
+            'out': 'audio/techno_out.wav',
+            'ambient': 'audio/ambient.mp3',
+            'metronome': 'audio/metronome.wav'
+        };
+
+        // Generate random images for each trial
+        function getRandomImages() {
+            const images = [];
+            const used = new Set();
+            while (images.length < IMAGES_PER_TRIAL) {
+                const num = Math.floor(Math.random() * 400) + 1;
+                if (!used.has(num)) {
+                    used.add(num);
+                    images.push(`img/img_${num}.jpg`);
+                }
+            }
+            return images;
+        }
+
+        // Get volume
+        function getVolume() {
+            return document.getElementById('volume').value / 100;
+        }
+
+        // Update volume display
+        document.getElementById('volume').addEventListener('input', function() {
+            document.getElementById('volumeValue').textContent = this.value + '%';
+            if (audioElement) {
+                audioElement.volume = getVolume();
+            }
+        });
+
+        // Start the test
+        function startTest() {
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('skipBtn').disabled = false;
+            currentConditionIndex = 0;
+            runCondition();
+        }
+
+        // Run a single condition
+        function runCondition() {
+            if (currentConditionIndex >= conditions.length) {
+                endTest();
+                return;
+            }
+
+            isRunning = true;
+            const condition = conditions[currentConditionIndex];
+            trialImages = getRandomImages();
+            currentImageIndex = 0;
+
+            // Update UI
+            const label = document.getElementById('conditionLabel');
+            label.textContent = condition.toUpperCase();
+            label.className = 'condition-label ' + condition;
+            label.style.display = 'inline-block';
+
+            updateProgress();
+
+            // Show fixation
+            document.getElementById('display').innerHTML = '<div class="fixation">+</div>';
+
+            // After fixation, start images
+            setTimeout(() => {
+                if (!isRunning) return;
+                startImageSequence(condition);
+            }, 1000);
+        }
+
+        // Start showing images
+        function startImageSequence(condition) {
+            // Preload audio
+            audioElement = new Audio(audioFiles[condition]);
+            audioElement.volume = getVolume();
+
+            // Show first image and start audio
+            showImage(0);
+
+            // For 'out' condition, delay audio by half a beat
+            if (condition === 'out') {
+                const outOfSyncDelay = BEAT_DURATION / 2;
+                setTimeout(() => {
+                    if (audioElement) audioElement.play();
+                }, outOfSyncDelay);
+            } else {
+                audioElement.play();
+            }
+
+            // Set up interval for remaining images
+            currentImageIndex = 1;
+            imageInterval = setInterval(() => {
+                if (!isRunning || currentImageIndex >= IMAGES_PER_TRIAL) {
+                    clearInterval(imageInterval);
+                    imageInterval = null;
+                    if (isRunning) {
+                        endCondition();
+                    }
+                    return;
+                }
+                showImage(currentImageIndex);
+                currentImageIndex++;
+            }, REP_DURATION);
+        }
+
+        // Show a single image
+        function showImage(index) {
+            document.getElementById('display').innerHTML =
+                `<img src="${trialImages[index]}" alt="Image ${index + 1}">`;
+            updateProgress();
+        }
+
+        // Update progress display
+        function updateProgress() {
+            const condition = conditions[currentConditionIndex];
+            document.getElementById('progress').textContent =
+                `Condition ${currentConditionIndex + 1}/4: ${condition} | Image ${currentImageIndex + 1}/${IMAGES_PER_TRIAL}`;
+        }
+
+        // End current condition
+        function endCondition() {
+            // Stop audio
+            if (audioElement) {
+                audioElement.pause();
+                audioElement = null;
+            }
+
+            isRunning = false;
+
+            // Brief pause then next condition
+            document.getElementById('display').innerHTML = '<p>Condition complete!</p>';
+
+            setTimeout(() => {
+                currentConditionIndex++;
+                if (currentConditionIndex < conditions.length) {
+                    runCondition();
+                } else {
+                    endTest();
+                }
+            }, 1500);
+        }
+
+        // Skip to next condition
+        function skipToNext() {
+            if (imageInterval) {
+                clearInterval(imageInterval);
+                imageInterval = null;
+            }
+            if (audioElement) {
+                audioElement.pause();
+                audioElement = null;
+            }
+            isRunning = false;
+
+            currentConditionIndex++;
+            if (currentConditionIndex < conditions.length) {
+                runCondition();
+            } else {
+                endTest();
+            }
+        }
+
+        // End the test
+        function endTest() {
+            isRunning = false;
+            document.getElementById('conditionLabel').style.display = 'none';
+            document.getElementById('display').innerHTML = '<p>Test complete! All 4 conditions shown.</p>';
+            document.getElementById('progress').textContent = '';
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('startBtn').textContent = 'Restart Test';
+            document.getElementById('skipBtn').disabled = true;
+        }
+    </script>
+</body>
+</html>

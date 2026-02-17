@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work | Laith Jaroudi</title>
+  <meta name="description" content="UX Research case studies and product design projects by Laith Jaroudi.">
+  
+  <!-- Fonts -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&f[]=general-sans@600,500,400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/work.css">
+
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body>
+  <!-- Dither Background -->
+  <canvas id="dither-background" class="dither-background" data-direction="-1,1"></canvas>
+
+  <!-- Background Layers -->
+  <div class="background-layers">
+    <div class="gradient-orbs">
+      <div class="orb orb--blue orb--work-1"></div>
+      <div class="orb orb--purple orb--work-2"></div>
+    </div>
+    <div class="abstract-shapes">
+      <div class="shape shape--ring shape--ring-1"></div>
+      <div class="shape shape--ring shape--ring-2"></div>
+    </div>
+  </div>
+  <div class="grain-overlay"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">Laith<span>.</span></a>
+
+      <button class="nav__toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <ul class="nav__links">
+        <li><a href="index.html" class="nav__link">Home</a></li>
+        <li><a href="work.html" class="nav__link active">Work</a></li>
+        <li><a href="about.html" class="nav__link">About</a></li>
+        <li><a href="contact.html" class="nav__link">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <main class="page">
+    <div class="container">
+      <!-- Page Header -->
+      <header class="page-header reveal">
+        <h1 class="page-header__title">Selected Work</h1>
+        <p class="page-header__subtitle">
+          Research studies, design projects, and explorations at the intersection 
+          of cognitive science and human-centered design.
+        </p>
+      </header>
+
+      <!-- Filter Tags (optional) -->
+      <div class="work-filters reveal">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="research">Research</button>
+        <button class="filter-btn" data-filter="design">Design</button>
+        <button class="filter-btn" data-filter="audio">Audio</button>
+      </div>
+
+      <!-- Projects List -->
+      <div class="work-list">
+        
+        <!-- Project 1: Environmental Sound Effects & False Memory -->
+        <article class="work-item reveal" id="soundscapes" data-category="research">
+          <div class="work-item__image">
+            <div class="work-item__placeholder" style="background: linear-gradient(135deg, #001433 0%, #003d99 100%);">
+              <img src="assets/images/projects/soundscapes-colloquium.jpg" alt="Laith presenting at the departmental colloquium" class="work-item__img">
+            </div>
+          </div>
+          <div class="work-item__content">
+            <div class="work-item__meta">
+              <span class="work-item__tag">UX Research</span>
+              <span class="work-item__tag">Experimental Design</span>
+              <span class="work-item__tag">Statistical Analysis</span>
+              <span class="work-item__year">2025 to 2026</span>
+            </div>
+            <h2 class="work-item__title">Environmental Sound Effects & False Memory</h2>
+            <p class="work-item__desc">
+              A 2×2 between-subjects experiment (n=67) investigating how environmental sound effects
+              influence memory accuracy using the DRM paradigm. Discovered that auditory cues integrate
+              with semantic memory rather than creating distinct verbatim traces—revealing a critical
+              disconnect between user confidence and actual accuracy (p=.048).
+            </p>
+            <div class="work-item__details">
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Role</span>
+                <span class="work-item__detail-value">Lead Researcher & Study Designer</span>
+              </div>
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Methods</span>
+                <span class="work-item__detail-value">2×2 ANOVA, DRM Paradigm, Qualtrics</span>
+              </div>
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Key Finding</span>
+                <span class="work-item__detail-value">Higher confidence correlates with more false memories (r=.28, p=.021)</span>
+              </div>
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Institution</span>
+                <span class="work-item__detail-value">UCSB Dept. of Psychological & Brain Sciences</span>
+              </div>
+            </div>
+            <a href="case-studies/soundscapes.html" class="btn btn--outline work-item__btn">
+              View Case Study
+              <span class="btn__arrow">→</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 2: Rhythmic Entrainment -->
+        <article class="work-item reveal" id="entrainment" data-category="research">
+          <div class="work-item__image">
+            <div class="work-item__placeholder" style="background: linear-gradient(135deg, #050505 0%, #0a0d12 100%); overflow: hidden;">
+              <svg viewBox="0 0 400 250" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                <defs>
+                  <clipPath id="workScreenClip">
+                    <rect x="38" y="75" width="104" height="70" rx="4"/>
+                  </clipPath>
+                </defs>
+
+                <!-- Pulse rings from screen -->
+                <circle cx="90" cy="110" r="30" stroke="#22c55e" stroke-width="1" fill="none" opacity="0">
+                  <animate attributeName="r" values="30;70" dur="2s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.5;0" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="90" cy="110" r="30" stroke="#22c55e" stroke-width="1" fill="none" opacity="0">
+                  <animate attributeName="r" values="30;70" dur="2s" begin="0.7s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.3;0" dur="2s" begin="0.7s" repeatCount="indefinite"/>
+                </circle>
+
+                <!-- Screen frame -->
+                <rect x="30" y="65" width="120" height="90" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+
+                <!-- Sample image inside screen -->
+                <image href="assets/images/entrainment/img_1.jpg" x="38" y="75" width="104" height="70" clip-path="url(#workScreenClip)" preserveAspectRatio="xMidYMid slice">
+                  <animate attributeName="href" values="assets/images/entrainment/img_1.jpg;assets/images/entrainment/img_5.jpg;assets/images/entrainment/img_10.jpg;assets/images/entrainment/img_15.jpg;assets/images/entrainment/img_20.jpg;assets/images/entrainment/img_1.jpg" dur="4.5s" repeatCount="indefinite"/>
+                </image>
+
+                <!-- Screen glow -->
+                <rect x="38" y="75" width="104" height="70" rx="4" fill="none" stroke="#22c55e" stroke-width="2" opacity="0">
+                  <animate attributeName="opacity" values="0;0.7;0" dur="0.9s" repeatCount="indefinite"/>
+                </rect>
+
+                <!-- Connection -->
+                <path d="M155 110 L185 110 L185 125 L210 125" stroke="rgba(34, 197, 94, 0.5)" stroke-width="2" fill="none" stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite"/>
+                </path>
+
+                <!-- Large Metronome Ring -->
+                <circle cx="300" cy="125" r="75" stroke="rgba(34, 197, 94, 0.12)" stroke-width="5" fill="none"/>
+                <circle cx="300" cy="125" r="75" stroke="rgba(34, 197, 94, 0.06)" stroke-width="16" fill="none"/>
+                <circle cx="300" cy="125" r="75" stroke="#22c55e" stroke-width="5" fill="none"
+                  stroke-dasharray="471" stroke-dashoffset="353" stroke-linecap="round"
+                  style="filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.6));">
+                  <animateTransform attributeName="transform" type="rotate" from="0 300 125" to="360 300 125" dur="1.8s" repeatCount="indefinite"/>
+                </circle>
+
+                <!-- Inner glow ring -->
+                <circle cx="300" cy="125" r="50" stroke="rgba(34, 197, 94, 0.08)" stroke-width="1.5" fill="none"/>
+
+                <!-- Center beat -->
+                <text x="300" y="135" text-anchor="middle" fill="white" font-family="system-ui" font-size="32" font-weight="700" opacity="0.95">
+                  1
+                  <animate attributeName="opacity" values="0.95;0.5;0.95" dur="0.9s" repeatCount="indefinite"/>
+                </text>
+                <text x="300" y="155" text-anchor="middle" fill="rgba(34, 197, 94, 0.7)" font-family="monospace" font-size="10">BEAT</text>
+
+                <!-- Beat dots -->
+                <circle cx="50" cy="175" r="4" fill="#22c55e">
+                  <animate attributeName="opacity" values="0.2;1;0.2" dur="0.9s" repeatCount="indefinite"/>
+                  <animate attributeName="r" values="3;5;3" dur="0.9s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="70" cy="175" r="3" fill="#22c55e" opacity="0.4">
+                  <animate attributeName="opacity" values="0.2;1;0.2" dur="0.9s" begin="0.225s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="90" cy="175" r="3" fill="#22c55e" opacity="0.4">
+                  <animate attributeName="opacity" values="0.2;1;0.2" dur="0.9s" begin="0.45s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="110" cy="175" r="3" fill="#22c55e" opacity="0.4">
+                  <animate attributeName="opacity" values="0.2;1;0.2" dur="0.9s" begin="0.675s" repeatCount="indefinite"/>
+                </circle>
+
+                <!-- BPM -->
+                <text x="80" y="195" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-family="monospace" font-size="10">128.57 BPM</text>
+              </svg>
+            </div>
+            <div class="work-item__badge">In Progress</div>
+          </div>
+          <div class="work-item__content">
+            <div class="work-item__meta">
+              <span class="work-item__tag">Honors Thesis</span>
+              <span class="work-item__tag">jsPsych</span>
+              <span class="work-item__tag">Cognitive Science</span>
+              <span class="work-item__year">2025 to 2026</span>
+            </div>
+            <h2 class="work-item__title">Rhythmic Entrainment & Temporal Order Memory</h2>
+            <p class="work-item__desc">
+              Can music help us remember the order of events? This honors thesis investigates
+              whether isochronous auditory rhythms (techno music) can act as a temporal scaffold
+              to enhance encoding of visual episodic memory, testing Dynamic Attending Theory
+              with ecologically valid stimuli.
+            </p>
+            <div class="work-item__details">
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Role</span>
+                <span class="work-item__detail-value">Lead Researcher & Developer</span>
+              </div>
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Methods</span>
+                <span class="work-item__detail-value">jsPsych, Temporal Order Judgment, Within-Subjects</span>
+              </div>
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Lab</span>
+                <span class="work-item__detail-value">Memory & Decision Making Lab (Dr. Miller)</span>
+              </div>
+            </div>
+            <a href="case-studies/entrainment.html" class="btn btn--outline work-item__btn">
+              View Case Study
+              <span class="btn__arrow">→</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 3: EEG Synthesizer -->
+        <article class="work-item reveal" id="eeg-synth" data-category="design audio">
+          <div class="work-item__image">
+            <div class="work-item__placeholder">
+              <img src="assets/images/synth/eeg-synth-demo.gif" alt="EEG Ambient Synth interface showing neural oscilloscope, frequency matrix, and synthesis controls" class="work-item__img">
+            </div>
+            <div class="work-item__badge">Prototype</div>
+          </div>
+          <div class="work-item__content">
+            <div class="work-item__meta">
+              <span class="work-item__tag">Product Design</span>
+              <span class="work-item__tag">Audio</span>
+              <span class="work-item__tag">Brain-Computer Interface</span>
+              <span class="work-item__year">2025</span>
+            </div>
+            <h2 class="work-item__title">EEG Synthesizer</h2>
+            <p class="work-item__desc">
+              A synthesizer controlled by brainwave data, exploring the intersection of 
+              neuroscience and music production. This prototype translates EEG signals into 
+              audio parameters, creating a direct link between mental states and sound design.
+            </p>
+            <div class="work-item__details">
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Role</span>
+                <span class="work-item__detail-value">Designer & Developer</span>
+              </div>
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Tools</span>
+                <span class="work-item__detail-value">React, Web Audio API, Tone.js</span>
+              </div>
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Status</span>
+                <span class="work-item__detail-value">Working Prototype</span>
+              </div>
+            </div>
+            <a href="case-studies/eeg-synth.html" class="btn btn--outline work-item__btn">
+              View Case Study
+              <span class="btn__arrow">→</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 4: Ball Knowledge -->
+        <article class="work-item reveal" id="ball-knowledge" data-category="design">
+          <div class="work-item__image">
+            <div class="work-item__placeholder" style="background: linear-gradient(135deg, #0c1220 0%, #1a2332 100%);">
+              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="work-item__icon">
+                <!-- Football/Soccer ball -->
+                <circle cx="100" cy="60" r="40" stroke="url(#ballGrad)" stroke-width="2" fill="none"/>
+                <!-- Pentagon patterns -->
+                <path d="M100 30 L112 42 L108 56 L92 56 L88 42 Z" stroke="white" stroke-width="1" fill="none" opacity="0.4"/>
+                <path d="M125 50 L132 62 L125 74 L113 70 L113 54 Z" stroke="white" stroke-width="1" fill="none" opacity="0.4"/>
+                <path d="M75 50 L68 62 L75 74 L87 70 L87 54 Z" stroke="white" stroke-width="1" fill="none" opacity="0.4"/>
+                <path d="M92 75 L88 84 L100 90 L112 84 L108 75 Z" stroke="white" stroke-width="1" fill="none" opacity="0.4"/>
+                <!-- Animated outer ring -->
+                <circle cx="100" cy="60" r="45" stroke="url(#ballGrad)" stroke-width="1" fill="none" stroke-dasharray="283" opacity="0.5">
+                  <animateTransform attributeName="transform" type="rotate" from="0 100 60" to="360 100 60" dur="15s" repeatCount="indefinite"/>
+                </circle>
+                <defs>
+                  <linearGradient id="ballGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#22d3ee"/>
+                    <stop offset="50%" stop-color="#3b82f6"/>
+                    <stop offset="100%" stop-color="#8b5cf6"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <div class="work-item__badge work-item__badge--coming-soon">Coming Soon</div>
+          </div>
+          <div class="work-item__content">
+            <div class="work-item__meta">
+              <span class="work-item__tag">Product Design</span>
+              <span class="work-item__tag">UX Research</span>
+              <span class="work-item__tag">Figma</span>
+              <span class="work-item__year">2026</span>
+            </div>
+            <h2 class="work-item__title">Ball Knowledge</h2>
+            <p class="work-item__desc">
+              A multiplayer football trivia app for iPhone that tests your knowledge of
+              the beautiful game. This project showcases my end-to-end product design
+              process, from UX research and user flows to high-fidelity Figma mockups.
+            </p>
+            <div class="work-item__details">
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Role</span>
+                <span class="work-item__detail-value">Product Designer</span>
+              </div>
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Platform</span>
+                <span class="work-item__detail-value">iOS (iPhone)</span>
+              </div>
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Tools</span>
+                <span class="work-item__detail-value">Figma, FigJam, User Research</span>
+              </div>
+            </div>
+            <a href="case-studies/ball-knowledge.html" class="btn btn--outline work-item__btn">
+              View Case Study
+              <span class="btn__arrow">→</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 5: Audio Content (8+ years experience) -->
+        <article class="work-item reveal" id="audio" data-category="audio design">
+          <div class="work-item__image">
+            <div class="work-item__placeholder" style="background: linear-gradient(135deg, #12141a 0%, #1a1d25 100%);">
+              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="work-item__icon">
+                <rect x="60" y="30" width="4" height="60" rx="2" fill="white" opacity="0.4"/>
+                <rect x="75" y="45" width="4" height="30" rx="2" fill="white" opacity="0.5"/>
+                <rect x="90" y="25" width="4" height="70" rx="2" fill="white" opacity="0.6"/>
+                <rect x="105" y="40" width="4" height="40" rx="2" fill="white" opacity="0.7"/>
+                <rect x="120" y="35" width="4" height="50" rx="2" fill="white" opacity="0.8"/>
+                <rect x="135" y="50" width="4" height="20" rx="2" fill="white" opacity="0.6"/>
+              </svg>
+            </div>
+          </div>
+          <div class="work-item__content">
+            <div class="work-item__meta">
+              <span class="work-item__tag">Sound Design</span>
+              <span class="work-item__tag">Music Production</span>
+              <span class="work-item__tag">8+ Years</span>
+              <span class="work-item__year">2017 to Present</span>
+            </div>
+            <h2 class="work-item__title">Audio & Sound Design</h2>
+            <p class="work-item__desc">
+              8+ years of professional experience in audio production, sound design, and 
+              music creation. Expert proficiency in Ableton Live and FL Studio, with deep 
+              knowledge of signal flow, DSP chains, and VST integration. Specialized in 
+              EDM and Techno production.
+            </p>
+            <div class="work-item__details">
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Tools</span>
+                <span class="work-item__detail-value">Ableton Live, FL Studio, Various VSTs</span>
+              </div>
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Specialization</span>
+                <span class="work-item__detail-value">EDM, Techno, Psychoacoustics</span>
+              </div>
+              <div class="work-item__detail">
+                <span class="work-item__detail-label">Notable</span>
+                <span class="work-item__detail-value">TEDxYouth @ACS Executive Producer</span>
+              </div>
+            </div>
+            <a href="https://cheddarness.com" class="btn btn--outline work-item__btn" target="_blank" rel="noopener">
+              Visit cheddarness.com
+              <span class="btn__arrow">→</span>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p class="copyright">© 2025 Laith Jaroudi</p>
+      <nav class="footer-links">
+        <a href="mailto:laithjaroudi@gmail.com">Email</a>
+        <a href="https://linkedin.com/in/laithjaroudi" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="assets/Laith_Jaroudi_CV.pdf" target="_blank">CV</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/dither-background.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Laith Jaroudi</title>
+  <meta name="description" content="Get in touch with Laith Jaroudi for Product Design and UX Research opportunities.">
+
+  <!-- Fonts -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&f[]=general-sans@600,500,400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/contact.css">
+
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body>
+  <!-- Dither Background -->
+  <canvas id="dither-background" class="dither-background" data-direction="-1,-1"></canvas>
+
+  <!-- Background Layers -->
+  <div class="background-layers">
+    <div class="gradient-orbs">
+      <div class="orb orb--blue orb--contact-1"></div>
+    </div>
+  </div>
+  <div class="grain-overlay"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">Laith<span>.</span></a>
+
+      <button class="nav__toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav__links">
+        <li><a href="index.html" class="nav__link">Home</a></li>
+        <li><a href="work.html" class="nav__link">Work</a></li>
+        <li><a href="about.html" class="nav__link">About</a></li>
+        <li><a href="contact.html" class="nav__link active">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <main class="page contact-page">
+    <div class="container">
+
+      <!-- Two Column Section -->
+      <section class="contact-section">
+
+        <!-- Left: Photo -->
+        <div class="contact-photo-wrapper">
+          <span class="section__label contact-anim">Get In Touch</span>
+          <div class="contact-photo contact-anim">
+            <img src="assets/images/portraits/IMG_3811.png" alt="Laith Jaroudi" />
+          </div>
+        </div>
+
+        <!-- Right: Info -->
+        <div class="contact-info">
+          <h1 class="contact-anim">Let's <em>connect</em></h1>
+
+          <p class="contact-bio contact-anim">
+            I'm a Quantitative UX Researcher and Product Designer with a passion for
+            understanding how people think. I'd love to hear about how I can help
+            your team build better experiences.
+          </p>
+
+          <div class="contact-links">
+            <a href="https://www.linkedin.com/in/laith-jaroudi-473070243/" class="contact-link contact-link-anim" target="_blank" rel="noopener">
+              <svg class="contact-link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                <rect x="2" y="9" width="4" height="12"/>
+                <circle cx="4" cy="4" r="2"/>
+              </svg>
+              <div class="contact-link__info">
+                <span class="contact-link__label">LinkedIn</span>
+                <span class="contact-link__text">Connect with me</span>
+              </div>
+              <span class="contact-link__arrow">→</span>
+            </a>
+
+            <a href="mailto:laithjaroudi@gmail.com" class="contact-link contact-link-anim">
+              <svg class="contact-link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+              <div class="contact-link__info">
+                <span class="contact-link__label">Email</span>
+                <span class="contact-link__text">laithjaroudi@gmail.com</span>
+              </div>
+              <span class="contact-link__arrow">→</span>
+            </a>
+
+            <a href="https://cheddarness.com" class="contact-link contact-link-anim" target="_blank" rel="noopener">
+              <svg class="contact-link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <div class="contact-link__info">
+                <span class="contact-link__label">Creative Website</span>
+                <span class="contact-link__text">cheddarness.com</span>
+              </div>
+              <span class="contact-link__arrow">→</span>
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Location Footer -->
+      <div class="contact-footer contact-footer-anim">
+        <div class="contact-footer__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span>Based in <strong>Santa Barbara, California</strong></span>
+        </div>
+        <div class="contact-footer__item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <span>Open to <strong>remote</strong> and <strong>relocation</strong></span>
+        </div>
+      </div>
+
+      <!-- Availability Banner -->
+      <div class="contact-banner contact-banner-anim">
+        <div class="availability-badge">
+          <span class="availability-dot"></span>
+          <span class="availability-text">Open to opportunities</span>
+        </div>
+        <p class="availability-desc">
+          Looking to help teams grow through research-driven design.
+          Let's build something meaningful together.
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p class="copyright">© 2025 Laith Jaroudi</p>
+      <nav class="footer-links">
+        <a href="mailto:laithjaroudi@gmail.com">Email</a>
+        <a href="https://linkedin.com/in/laithjaroudi" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="assets/Laith_Jaroudi_CV.pdf" target="_blank">CV</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/dither-background.js"></script>
+</body>
+</html>

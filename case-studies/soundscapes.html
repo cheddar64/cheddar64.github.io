@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Environmental Sound Effects & False Memory | Laith Jaroudi</title>
+  <meta name="description" content="A 2×2 between-subjects experiment investigating how environmental sound effects influence memory accuracy using the DRM paradigm.">
+
+  <!-- Fonts -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&f[]=general-sans@600,500,400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/case-study.css">
+
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body>
+  <!-- Dither Background -->
+  <canvas id="dither-background" class="dither-background" data-direction="0.5,1"></canvas>
+
+  <!-- Background Layers -->
+  <div class="background-layers">
+    <div class="gradient-orbs">
+      <div class="orb orb--blue orb--work-1"></div>
+      <div class="orb orb--cyan orb--about-2"></div>
+    </div>
+    <div class="abstract-shapes">
+      <div class="shape shape--ring shape--ring-1"></div>
+    </div>
+  </div>
+  <div class="grain-overlay"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="../index.html" class="nav__logo">Laith<span>.</span></a>
+
+      <button class="nav__toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav__links">
+        <li><a href="../index.html" class="nav__link">Home</a></li>
+        <li><a href="../work.html" class="nav__link">Work</a></li>
+        <li><a href="../about.html" class="nav__link">About</a></li>
+        <li><a href="../contact.html" class="nav__link">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Case Study Content -->
+  <main class="case-study">
+    <!-- Hero Section -->
+    <header class="case-study__hero">
+      <div class="container">
+        <a href="../work.html" class="case-study__back">
+          <span class="case-study__back-arrow">←</span>
+          Back to Work
+        </a>
+
+        <div class="case-study__meta reveal">
+          <span class="case-study__tag">UX Research</span>
+          <span class="case-study__tag">Experimental Design</span>
+          <span class="case-study__tag">Statistical Analysis</span>
+        </div>
+
+        <h1 class="case-study__title reveal">Environmental Sound Effects & False Memory</h1>
+
+        <p class="case-study__subtitle reveal">
+          Investigating how environmental auditory cues influence memory accuracy
+          and user confidence through the DRM paradigm.
+        </p>
+
+        <!-- Key Stats -->
+        <div class="case-study__stats reveal">
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">67</span>
+            <span class="case-study__stat-label">Participants</span>
+          </div>
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">2×2</span>
+            <span class="case-study__stat-label">Between-Subjects</span>
+          </div>
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">p=.048</span>
+            <span class="case-study__stat-label">Significance</span>
+          </div>
+          <div class="case-study__stat">
+            <span class="case-study__stat-value">r=.28</span>
+            <span class="case-study__stat-label">Correlation</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Image -->
+    <div class="case-study__hero-image reveal">
+      <div class="container">
+        <div class="case-study__image-wrapper case-study__image-wrapper--photo">
+          <img src="../assets/images/projects/soundscapes-colloquium.jpg" alt="Laith presenting at the departmental colloquium" class="case-study__image">
+        </div>
+      </div>
+    </div>
+
+    <!-- Overview Section -->
+    <section class="case-study__section">
+      <div class="container">
+        <div class="case-study__grid">
+          <div class="case-study__sidebar reveal">
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Role</h3>
+              <p class="case-study__info-value">Lead Researcher & Study Designer</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Timeline</h3>
+              <p class="case-study__info-value">Fall 2025 to Winter 2026</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Institution</h3>
+              <p class="case-study__info-value">UCSB Dept. of Psychological & Brain Sciences</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Methods</h3>
+              <p class="case-study__info-value">2×2 ANOVA, DRM Paradigm, Qualtrics, SPSS</p>
+            </div>
+            <div class="case-study__info-block">
+              <h3 class="case-study__info-label">Deliverables</h3>
+              <div class="case-study__deliverable">
+                <span class="case-study__deliverable-label">Research Paper</span>
+                <div class="case-study__deliverable-actions">
+                  <button class="case-study__view-btn" data-pdf="../assets/documents/soundscapes-paper.pdf" data-title="Research Paper">View</button>
+                  <a href="../assets/documents/soundscapes-paper.pdf" class="case-study__download-link" target="_blank">Download ↓</a>
+                </div>
+              </div>
+              <div class="case-study__deliverable">
+                <span class="case-study__deliverable-label">Research Poster</span>
+                <div class="case-study__deliverable-actions">
+                  <button class="case-study__view-btn" data-pdf="../assets/documents/soundscapes-poster.pdf" data-title="Research Poster">View</button>
+                  <a href="../assets/documents/soundscapes-poster.pdf" class="case-study__download-link" target="_blank">Download ↓</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="case-study__content reveal">
+            <h2 class="case-study__heading">Overview</h2>
+            <p class="case-study__text">
+              This study investigated whether environmental sound effects (SFX) paired with
+              semantically related word lists could influence memory accuracy. Using the
+              Deese-Roediger-McDermott (DRM) paradigm, a well-established method for studying
+              false memory, I explored how auditory context affects both true and false recall.
+            </p>
+            <p class="case-study__text">
+              The findings revealed a critical disconnect between user confidence and actual
+              accuracy, with significant implications for UX design in audio-enhanced interfaces.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="case-study__section case-study__section--alt">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">The Problem</h2>
+          <p class="case-study__text-large">
+            Digital products increasingly use ambient sounds and audio cues to enhance user
+            experience. But how do these auditory elements affect cognitive processing and
+            memory accuracy?
+          </p>
+          <p class="case-study__text">
+            Previous research has shown that the DRM paradigm reliably produces false memories —
+            participants often "remember" words that were never presented but are semantically
+            related to the list theme. I hypothesized that adding environmental sound effects
+            that match the word list theme might create stronger contextual encoding, potentially
+            reducing false memory by providing distinctive sensory cues.
+          </p>
+
+          <div class="case-study__research-questions">
+            <h3 class="case-study__subheading">Research Questions</h3>
+            <ol class="case-study__list">
+              <li>Does the presence of environmental sound effects reduce false recognition rates in the DRM paradigm?</li>
+              <li>How does participant confidence interact with sound conditions to affect memory accuracy?</li>
+              <li>Can auditory context provide distinctive encoding cues that enhance verbatim memory traces?</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section class="case-study__section">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">Methodology</h2>
+
+          <div class="case-study__method-grid">
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">Participants</h3>
+              <p class="case-study__method-text">
+                67 undergraduate students from UCSB participated for course credit.
+                Participants were randomly assigned to one of four conditions.
+              </p>
+            </div>
+
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">Design</h3>
+              <p class="case-study__method-text">
+                2×2 between-subjects factorial design:<br>
+                <strong>Factor 1:</strong> Sound Condition (SFX vs. No SFX)<br>
+                <strong>Factor 2:</strong> Confidence Level (High vs. Low)
+              </p>
+            </div>
+
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">DRM Paradigm</h3>
+              <p class="case-study__method-text">
+                Participants studied word lists where each list was semantically associated
+                with a critical lure (never presented but expected to be falsely recognized).
+                Example: "bed, rest, awake, tired, dream..." with the critical lure being "SLEEP"
+              </p>
+            </div>
+
+            <div class="case-study__method-card">
+              <h3 class="case-study__method-title">Sound Manipulation</h3>
+              <p class="case-study__method-text">
+                SFX condition: Environmental sounds matching list themes played during encoding
+                (e.g., ocean waves for beach-related words, birdsong for nature words).<br>
+                Control: Silent encoding condition.
+              </p>
+            </div>
+          </div>
+
+          <div class="case-study__procedure">
+            <h3 class="case-study__subheading">Procedure</h3>
+            <div class="case-study__timeline">
+              <div class="case-study__timeline-item">
+                <span class="case-study__timeline-number">1</span>
+                <div class="case-study__timeline-content">
+                  <h4>Encoding Phase</h4>
+                  <p>Participants viewed word lists (15 words each) at 2-second intervals. SFX group heard thematically matched environmental sounds.</p>
+                </div>
+              </div>
+              <div class="case-study__timeline-item">
+                <span class="case-study__timeline-number">2</span>
+                <div class="case-study__timeline-content">
+                  <h4>Distractor Task</h4>
+                  <p>Brief filler activity to prevent rehearsal and simulate natural memory decay.</p>
+                </div>
+              </div>
+              <div class="case-study__timeline-item">
+                <span class="case-study__timeline-number">3</span>
+                <div class="case-study__timeline-content">
+                  <h4>Recognition Test</h4>
+                  <p>Old/New recognition judgment for studied words, critical lures, and unrelated new words.</p>
+                </div>
+              </div>
+              <div class="case-study__timeline-item">
+                <span class="case-study__timeline-number">4</span>
+                <div class="case-study__timeline-content">
+                  <h4>Confidence Rating</h4>
+                  <p>Participants rated their overall confidence in their memory performance on a 1-7 scale.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="case-study__section case-study__section--alt">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">Results</h2>
+
+          <!-- Animated Graph -->
+          <div class="animated-chart" id="results-chart">
+            <h3 class="animated-chart__title">False Recognition Rate by Confidence and Condition</h3>
+            <div class="animated-chart__container">
+              <div class="animated-chart__y-axis">
+                <span>0.5</span>
+                <span>0.4</span>
+                <span>0.3</span>
+                <span>0.2</span>
+                <span>0.1</span>
+                <span>0.0</span>
+              </div>
+              <div class="animated-chart__graph">
+                <div class="animated-chart__grid">
+                  <div class="animated-chart__grid-line"></div>
+                  <div class="animated-chart__grid-line"></div>
+                  <div class="animated-chart__grid-line"></div>
+                  <div class="animated-chart__grid-line"></div>
+                  <div class="animated-chart__grid-line"></div>
+                </div>
+                <div class="animated-chart__bars">
+                  <!-- High Confidence Group -->
+                  <div class="animated-chart__group">
+                    <div class="animated-chart__bar-wrapper">
+                      <div class="animated-chart__bar animated-chart__bar--no-sfx" data-value="0.45" style="--bar-height: 90%;">
+                        <span class="animated-chart__tooltip">No SFX: 0.45</span>
+                      </div>
+                      <div class="animated-chart__bar animated-chart__bar--sfx" data-value="0.45" style="--bar-height: 90%;">
+                        <span class="animated-chart__tooltip">SFX: 0.45</span>
+                      </div>
+                    </div>
+                    <span class="animated-chart__label">High Confidence</span>
+                  </div>
+                  <!-- Low Confidence Group -->
+                  <div class="animated-chart__group">
+                    <div class="animated-chart__bar-wrapper">
+                      <div class="animated-chart__bar animated-chart__bar--no-sfx" data-value="0.38" style="--bar-height: 76%;">
+                        <span class="animated-chart__tooltip">No SFX: 0.38</span>
+                      </div>
+                      <div class="animated-chart__bar animated-chart__bar--sfx" data-value="0.43" style="--bar-height: 86%;">
+                        <span class="animated-chart__tooltip">SFX: 0.43</span>
+                      </div>
+                    </div>
+                    <span class="animated-chart__label">Low Confidence</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="animated-chart__legend">
+              <div class="animated-chart__legend-item">
+                <span class="animated-chart__legend-color animated-chart__legend-color--no-sfx"></span>
+                <span>No SFX (Control)</span>
+              </div>
+              <div class="animated-chart__legend-item">
+                <span class="animated-chart__legend-color animated-chart__legend-color--sfx"></span>
+                <span>SFX (Experimental)</span>
+              </div>
+            </div>
+            <p class="animated-chart__caption">
+              High confidence participants showed elevated false recognition rates regardless of sound condition (p = .048)
+            </p>
+          </div>
+
+          <div class="case-study__results-grid">
+            <div class="case-study__result-card case-study__result-card--primary">
+              <h3 class="case-study__result-title">Main Effect of Confidence</h3>
+              <p class="case-study__result-stat">F(1,63) = 4.07, p = .048</p>
+              <p class="case-study__result-text">
+                Participants with higher confidence showed significantly higher false recognition
+                rates. This paradoxical finding suggests that confidence reflects the strength of
+                semantic activation rather than accurate verbatim memory.
+              </p>
+            </div>
+
+            <div class="case-study__result-card">
+              <h3 class="case-study__result-title">SFX Main Effect</h3>
+              <p class="case-study__result-stat">F(1,63) = 0.69, p = .410</p>
+              <p class="case-study__result-text">
+                No significant difference in false recognition between SFX and control conditions.
+                Sound effects did not reduce false memories as hypothesized.
+              </p>
+            </div>
+
+            <div class="case-study__result-card">
+              <h3 class="case-study__result-title">Confidence-Accuracy Correlation</h3>
+              <p class="case-study__result-stat">r = .28, p = .021</p>
+              <p class="case-study__result-text">
+                Positive correlation between confidence and false recognition rate. Higher
+                confidence predicted more false memories, not fewer.
+              </p>
+            </div>
+
+            <div class="case-study__result-card">
+              <h3 class="case-study__result-title">Interaction Effect</h3>
+              <p class="case-study__result-stat">F(1,63) = 0.12, p = .732</p>
+              <p class="case-study__result-text">
+                No significant interaction between sound condition and confidence level.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Insights Section -->
+    <section class="case-study__section">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">Key Insights</h2>
+
+          <div class="case-study__insights">
+            <div class="case-study__insight">
+              <div class="case-study__insight-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="22"/>
+                </svg>
+              </div>
+              <div class="case-study__insight-content">
+                <h3 class="case-study__insight-title">Auditory Cues Integrate with Gist Traces</h3>
+                <p class="case-study__insight-text">
+                  Rather than creating distinctive verbatim memory traces, environmental sound
+                  effects appear to integrate with and potentially strengthen semantic/gist-based
+                  memory processing. This challenges the assumption that more sensory context
+                  always improves memory accuracy.
+                </p>
+              </div>
+            </div>
+
+            <div class="case-study__insight">
+              <div class="case-study__insight-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6l4 2"/>
+                </svg>
+              </div>
+              <div class="case-study__insight-content">
+                <h3 class="case-study__insight-title">The Confidence-Accuracy Paradox</h3>
+                <p class="case-study__insight-text">
+                  Users who feel most confident in their memories may actually be the most
+                  susceptible to false memories. This "phantom recollection" phenomenon has
+                  significant implications for UX research. Confidence ratings alone may
+                  not indicate true recall accuracy.
+                </p>
+              </div>
+            </div>
+
+            <div class="case-study__insight">
+              <div class="case-study__insight-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+              </div>
+              <div class="case-study__insight-content">
+                <h3 class="case-study__insight-title">UX Design Implications</h3>
+                <p class="case-study__insight-text">
+                  When designing audio-enhanced interfaces, we must consider that ambient sounds
+                  may not improve memory for specific content. Instead, they may increase overall
+                  confidence while potentially introducing memory errors. Critical information
+                  should not rely solely on auditory context for accurate recall.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Limitations & Future Directions -->
+    <section class="case-study__section case-study__section--alt">
+      <div class="container">
+        <div class="case-study__grid">
+          <div class="case-study__half reveal">
+            <h2 class="case-study__heading">Limitations</h2>
+            <ul class="case-study__list">
+              <li>Single encoding session may not capture long-term memory effects</li>
+              <li>Laboratory setting differs from real-world interface contexts</li>
+              <li>Convenience sample of undergraduates may limit generalizability</li>
+              <li>Confidence measured post-test rather than per-item</li>
+            </ul>
+          </div>
+
+          <div class="case-study__half reveal">
+            <h2 class="case-study__heading">Future Directions</h2>
+            <ul class="case-study__list">
+              <li>Investigate specific sound characteristics (volume, rhythm, complexity)</li>
+              <li>Explore item-level confidence ratings during recognition</li>
+              <li>Test in applied interface contexts (e.g., onboarding, tutorials)</li>
+              <li>Examine delayed recall to assess long-term memory effects</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conclusion -->
+    <section class="case-study__section">
+      <div class="container">
+        <div class="case-study__content-wide reveal">
+          <h2 class="case-study__heading">Conclusion</h2>
+          <p class="case-study__text-large">
+            This study reveals a counterintuitive relationship between auditory context,
+            confidence, and memory accuracy. While environmental sound effects don't directly
+            increase false memories, they also don't provide the protective distinctive encoding
+            that was hypothesized.
+          </p>
+          <p class="case-study__text">
+            The significant positive correlation between confidence and false recognition
+            (r=.28, p=.021) presents a crucial finding for UX practitioners: <strong>user
+            confidence is not a reliable indicator of memory accuracy.</strong> When designing
+            audio-enhanced experiences, we must develop objective measures of user comprehension
+            rather than relying on subjective confidence ratings.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="case-study__cta">
+      <div class="container">
+        <div class="case-study__cta-content reveal">
+          <h2 class="case-study__cta-title">Interested in this research?</h2>
+          <p class="case-study__cta-text">
+            Download the full research poster or get in touch to discuss the findings.
+          </p>
+          <div class="case-study__cta-buttons">
+            <a href="../assets/documents/soundscapes-poster.pdf" class="btn btn--primary" target="_blank">
+              Download Poster
+              <span class="btn__arrow">↓</span>
+            </a>
+            <a href="../contact.html" class="btn btn--outline">
+              Get In Touch
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Next Project -->
+    <section class="case-study__next">
+      <div class="container">
+        <a href="entrainment.html" class="case-study__next-link reveal">
+          <span class="case-study__next-label">Next Project</span>
+          <span class="case-study__next-title">Rhythmic Entrainment & Temporal Order Memory</span>
+          <span class="case-study__next-arrow">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- PDF Viewer Modal -->
+  <div class="pdf-modal" id="pdf-modal">
+    <div class="pdf-modal__overlay"></div>
+    <div class="pdf-modal__container">
+      <div class="pdf-modal__header">
+        <h3 class="pdf-modal__title" id="pdf-modal-title">Document</h3>
+        <button class="pdf-modal__close" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="pdf-modal__content">
+        <iframe id="pdf-modal-iframe" src="" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p class="copyright">© 2025 Laith Jaroudi</p>
+      <nav class="footer-links">
+        <a href="mailto:laithjaroudi@gmail.com">Email</a>
+        <a href="https://linkedin.com/in/laithjaroudi" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="../assets/Laith_Jaroudi_CV.pdf" target="_blank">CV</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+  <script src="../js/dither-background.js"></script>
+
+  <!-- Chart Animation & PDF Modal -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Chart Animation
+      const chart = document.getElementById('results-chart');
+      if (chart) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              chart.classList.add('animate');
+              observer.unobserve(chart);
+            }
+          });
+        }, {
+          threshold: 0.3
+        });
+        observer.observe(chart);
+      }
+
+      // PDF Modal
+      const modal = document.getElementById('pdf-modal');
+      const modalTitle = document.getElementById('pdf-modal-title');
+      const modalIframe = document.getElementById('pdf-modal-iframe');
+      const closeBtn = modal.querySelector('.pdf-modal__close');
+      const overlay = modal.querySelector('.pdf-modal__overlay');
+      const viewBtns = document.querySelectorAll('.case-study__view-btn');
+
+      function openModal(pdfUrl, title) {
+        modalTitle.textContent = title;
+        modalIframe.src = pdfUrl;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        modal.classList.remove('active');
+        modalIframe.src = '';
+        document.body.style.overflow = '';
+      }
+
+      viewBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const pdfUrl = btn.dataset.pdf;
+          const title = btn.dataset.title;
+          openModal(pdfUrl, title);
+        });
+      });
+
+      closeBtn.addEventListener('click', closeModal);
+      overlay.addEventListener('click', closeModal);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          closeModal();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
