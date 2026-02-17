@@ -1,6 +1,6 @@
 /* ============================================
-   ANIMATIONS - Lenis + GSAP
-   Smooth scrolling and entrance animations
+   ANIMATIONS - GSAP ScrollTrigger
+   Entrance animations with native scrolling
    ============================================ */
 
 (function() {
@@ -8,37 +8,6 @@
 
   // Check for reduced motion preference
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ============================================
-     LENIS SMOOTH SCROLL
-     ============================================ */
-
-  let lenis = null;
-
-  function initLenis() {
-    if (prefersReducedMotion) return;
-
-    lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-      infinite: false,
-    });
-
-    // Connect Lenis to GSAP ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
-
-    // Use GSAP ticker for Lenis
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
-
-    gsap.ticker.lagSmoothing(0);
-  }
 
   /* ============================================
      GSAP SETUP
@@ -1034,11 +1003,8 @@
   }
 
   function onReady() {
-    // Initialize GSAP first
+    // Initialize GSAP
     initGSAP();
-
-    // Initialize Lenis smooth scroll
-    initLenis();
 
     // Run animations after page load
     window.addEventListener('load', () => {
