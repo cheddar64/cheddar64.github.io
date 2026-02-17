@@ -458,7 +458,7 @@
   }
 
   .skills-grid {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   }
 }
 
@@ -487,9 +487,11 @@
     left: calc(-1 * var(--space-lg) - 4px);
   }
 
+  /* Prevent horizontal overflow from negative margins */
   .about-personal {
-    margin: var(--space-xl) calc(-1 * var(--space-md));
+    margin: var(--space-xl) 0;
     padding: var(--space-xl) var(--space-md);
+    border-radius: var(--radius-md);
   }
 
   .about-hero__actions {
@@ -503,5 +505,14 @@
 
   .skills-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Ensure text doesn't overflow */
+  .about-hero__bio h1,
+  .about-section__title,
+  .timeline-item__content h3,
+  .education-item__content h3 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 }

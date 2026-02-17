@@ -328,10 +328,20 @@
 
   .contact-footer__item {
     font-size: 0.875rem;
+    /* Ensure text wraps on small screens */
+    flex-wrap: wrap;
   }
 
+  /* Prevent horizontal overflow from negative margins */
   .contact-banner {
-    margin: 0 calc(-1 * var(--space-md));
+    margin: 0;
     padding: var(--space-md);
+  }
+
+  /* Ensure text doesn't overflow */
+  .contact-info h1,
+  .contact-link__text {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 }

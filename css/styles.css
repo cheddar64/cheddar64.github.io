@@ -7,9 +7,14 @@
 /* Dither Background */
 .dither-background {
   position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Oversized to ensure coverage during zoom out */
+  width: 120vw;
+  height: 120vh;
+  min-width: 120%;
+  min-height: 120%;
   z-index: -10;
   opacity: 0.3;
   pointer-events: none;
@@ -96,9 +101,22 @@
   padding: 0;
 }
 
+/* Global overflow prevention */
+:root {
+  overflow-x: hidden;
+}
+
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  /* Prevent horizontal scroll from any source */
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -110,6 +128,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  /* Ensure content doesn't exceed viewport */
+  width: 100%;
+  position: relative;
 }
 
 /* Prevent scroll during loader */
@@ -145,6 +166,23 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+/* SVGs */
+svg {
+  max-width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Ensure all media respects container width */
+img, video, iframe, canvas, svg, object, embed {
+  max-width: 100%;
+}
+
+/* Media elements */
+video, iframe {
+  max-width: 100%;
 }
 
 /* ============================================
@@ -644,7 +682,8 @@ img {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  /* Use min() to prevent overflow on small screens */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
   gap: var(--space-lg);
 }
 
@@ -1227,6 +1266,28 @@ img {
   .contact-link {
     font-size: 1.125rem;
   }
+
+  /* Ensure project cards don't overflow */
+  .project-card {
+    min-width: 0;
+  }
+
+  /* Ensure hero title doesn't overflow */
+  .hero__title {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Constrain chaos button on small screens */
+  .chaos-button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero__cta .btn--outline {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 /* ============================================
@@ -1545,11 +1606,13 @@ html.lenis, html.lenis body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+  /* Ensure it doesn't contribute to scrollable width */
+  max-width: 100vw;
 }
 
 /* Gradient Orbs Container */
@@ -1735,28 +1798,31 @@ html.lenis, html.lenis body {
 /* Grain/Noise Overlay */
 .grain-overlay {
   position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
   z-index: 9998;
   opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
   animation: grain 0.8s steps(1) infinite;
+  /* Clip to viewport to prevent overflow */
+  overflow: hidden;
 }
 
 @keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-2%, -2%); }
-  20% { transform: translate(2%, 2%); }
-  30% { transform: translate(-1%, 2%); }
-  40% { transform: translate(2%, -1%); }
-  50% { transform: translate(-2%, 1%); }
-  60% { transform: translate(1%, -2%); }
-  70% { transform: translate(-1%, 1%); }
-  80% { transform: translate(1%, -1%); }
-  90% { transform: translate(2%, 2%); }
+  0%, 100% { background-position: 0 0; }
+  10% { background-position: -5px -5px; }
+  20% { background-position: 5px 5px; }
+  30% { background-position: -3px 5px; }
+  40% { background-position: 5px -3px; }
+  50% { background-position: -5px 3px; }
+  60% { background-position: 3px -5px; }
+  70% { background-position: -3px 3px; }
+  80% { background-position: 3px -3px; }
+  90% { background-position: 5px 5px; }
 }
 
 /* Mobile: Reduce orb sizes and disable some animations */
