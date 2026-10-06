@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-nav="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,9 +24,9 @@
   <!-- Fonts -->
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&f[]=general-sans@600,500,400&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
+  <!-- Styles: styles.css is the base (navigation, buttons, background); v2.css is the current design -->
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/about.css">
+  <link rel="stylesheet" href="css/v2.css">
 
   <!-- Lenis Smooth Scroll -->
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
@@ -39,17 +39,19 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 </head>
 <body>
-  <!-- Dither Background -->
-  <canvas id="dither-background" class="dither-background" data-direction="1,-1"></canvas>
-
-  <!-- Background Layers -->
+  <!-- Moving background: shows wherever a section is left transparent -->
+  <canvas id="dither-background" class="dither-background" data-direction="1,1"></canvas>
   <div class="background-layers">
     <div class="gradient-orbs">
-      <div class="orb orb--blue orb--about-1"></div>
-      <div class="orb orb--cyan orb--about-2"></div>
+      <div class="orb orb--blue orb--home-1"></div>
+      <div class="orb orb--cyan orb--home-2"></div>
+      <div class="orb orb--magenta orb--home-3"></div>
+      <div class="orb orb--purple orb--home-4"></div>
     </div>
     <div class="abstract-shapes">
+      <div class="shape shape--ring shape--ring-1"></div>
       <div class="shape shape--ring shape--ring-2"></div>
+      <div class="shape shape--ring shape--ring-3"></div>
     </div>
   </div>
   <div class="grain-overlay"></div>
@@ -74,313 +76,98 @@
     </div>
   </nav>
 
-  <!-- Page Content -->
-  <main class="page">
-    <div class="container">
-
-      <!-- About Hero (3-col: bio | photo | quick details) -->
-      <section class="about-hero">
-        <div class="about-hero__bio">
-          <p class="section__label about-anim">About Me</p>
-          <h1 class="about-anim">Laith Jaroudi</h1>
-
-          <p class="about-anim about-bio-p">
-            I am a cognitive science researcher. I study memory, attention, and music
-            cognition. I graduated from UC Santa Barbara in 2026 with a B.S. in
-            Psychological &amp; Brain Sciences (Honors) and minors in Philosophy and
-            Media Arts &amp; Design.
-          </p>
-
-          <p class="about-anim about-bio-p">
-            From 2024 to 2026 I was a research assistant in the Memory &amp; Decision
-            Making Lab, where I worked on a 64-channel EEG study of recognition memory
-            and completed an honors thesis on rhythm and temporal order memory. I have
-            also produced and DJed techno and ambient music for eight years.
-          </p>
-
-          <div class="about-hero__actions about-anim">
-            <a href="assets/Laith_Jaroudi_CV.pdf" class="btn btn--primary" download>
-              Download Resume
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-            </a>
-            <a href="contact.html" class="btn btn--outline">
-              Get In Touch
-            </a>
-          </div>
-        </div>
-
-        <div class="about-hero__image about-anim">
-          <img src="assets/images/portraits/portrait.png" alt="Laith Jaroudi" />
-        </div>
-
-        <div class="about-hero__details">
-          <div class="about-hero__detail-item about-anim">
-            <span class="about-hero__detail-label">Location</span>
-            <span class="about-hero__detail-value">Los Angeles, CA</span>
-          </div>
-          <div class="about-hero__detail-item about-anim">
-            <span class="about-hero__detail-label">Education</span>
-            <span class="about-hero__detail-value">UCSB, B.S. PBS (Honors), 2026</span>
-          </div>
-          <div class="about-hero__detail-item about-anim">
-            <span class="about-hero__detail-label">Focus</span>
-            <span class="about-hero__detail-value">Memory, Attention, Music Cognition</span>
-          </div>
-          <div class="about-hero__detail-item about-anim">
-            <span class="about-hero__detail-label">Languages</span>
-            <span class="about-hero__detail-value">EN, AR, FR, ES</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Stats -->
-      <section class="about-stats">
-        <div class="about-stat stat-anim">
-          <span class="about-stat__number" data-value="2" data-suffix="">0</span>
-          <span class="about-stat__label">Years as a Research Assistant</span>
-        </div>
-        <div class="about-stat stat-anim">
-          <span class="about-stat__number" data-value="8" data-suffix="">0</span>
-          <span class="about-stat__label">Years Producing Music</span>
-        </div>
-        <div class="about-stat stat-anim">
-          <span class="about-stat__number" data-value="5" data-suffix="×">0</span>
-          <span class="about-stat__label">Dean's Honors</span>
-        </div>
-      </section>
-
-      <!-- Education -->
-      <section class="about-section education-section">
-        <h2 class="about-section__title section-title-anim">Education</h2>
-
-        <div class="education-list">
-          <div class="education-item education-anim">
-            <div class="education-item__logo">
-              <svg viewBox="0 0 40 40" fill="none">
-                <circle cx="20" cy="20" r="18" stroke="#3b82f6" stroke-width="1.5" fill="none"/>
-                <text x="20" y="25" text-anchor="middle" fill="#3b82f6" font-size="12" font-weight="600">UC</text>
-              </svg>
-            </div>
-            <div class="education-item__content">
-              <h3>UC Santa Barbara</h3>
-              <p class="education-item__degree">B.S. in Psychological &amp; Brain Sciences (Honors)</p>
-              <p class="education-item__details">
-                Minors: Philosophy (Cognitive Theory Focus), Media Arts &amp; Design
-              </p>
-              <p class="education-item__meta">2022 to 2026, GPA: 3.69, 5× Dean's Honors</p>
-            </div>
-          </div>
-
-          <div class="education-item education-anim">
-            <div class="education-item__logo">
-              <svg viewBox="0 0 40 40" fill="none">
-                <rect x="5" y="5" width="30" height="30" rx="4" stroke="#3b82f6" stroke-width="1.5" fill="none"/>
-                <text x="20" y="25" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="600">G</text>
-              </svg>
-            </div>
-            <div class="education-item__content">
-              <h3>Google UX Design Professional Certificate</h3>
-              <p class="education-item__degree">Professional Certificate</p>
-              <p class="education-item__meta">2025</p>
+  <main>
+    <section class="p-top h-light" data-nav="light" data-navrgb="238, 240, 242">
+      <div class="container">
+        <div class="p-kicker p-in"><span class="h-label p-kind">About</span><span class="h-label">Los Angeles, CA</span></div>
+        <h1 class="p-title p-in">About me</h1>
+        <div class="h-grid p-about" style="margin-top: clamp(2rem, 6vh, 4rem);">
+          <figure class="p-about__photo p-in"><img src="assets/images/portraits/portrait-4x5.jpg" alt="Laith Jaroudi" width="687" height="859"></figure>
+          <div class="p-about__text p-in">
+            <p>I am a cognitive science researcher. I study memory, attention, and music cognition. I graduated from UC Santa Barbara in 2026 with a B.S. in Psychological &amp; Brain Sciences (Honors) and minors in Philosophy and Media Arts &amp; Design.</p>
+            <p>From 2024 to 2026 I was a research assistant in the Memory &amp; Decision Making Lab, where I worked on a 64-channel EEG study of recognition memory and completed an honors thesis on rhythm and temporal order memory. I have also produced and DJed techno and ambient music for eight years.</p>
+            <div class="h-btns" style="margin-top: clamp(1.5rem, 4vh, 2.5rem);">
+              <a class="btn btn--primary" href="assets/Laith_Jaroudi_CV.pdf">Download Resume</a>
+              <a class="btn btn--outline" href="contact.html">Get In Touch <i aria-hidden="true">&rarr;</i></a>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+    <section class="p-sec h-light" data-nav="light" data-navrgb="238, 240, 242">
+      <div class="container h-grid">
+        <h2 class="p-h2">Education</h2>
+        <div class="p-body">
+          <h3 class="p-h3">B.S. in Psychological &amp; Brain Sciences (Honors)</h3>
+          <p>UC Santa Barbara, 2022 to 2026. Minors in Philosophy (Cognitive Theory Focus) and Media Arts &amp; Design. GPA 3.69, 5× Dean's Honors.</p>
+          <h3 class="p-h3">Google UX Design Professional Certificate</h3>
+          <p>Professional certificate, 2025.</p>
+        </div>
+      </div>
+    </section>
+    <section class="h-sheet h-timeline" id="timeline" data-nav="dark" data-navrgb="33, 72, 216">
+      <div class="container h-grid h-tl">
+        <header class="h-tl__head">
+          <h2 class="h-h2">My Timeline</h2>
+          <p>Research, data, music and events. Research first.</p>
+        </header>
+        <div class="h-tl__body">
+          <span class="h-tl__line" aria-hidden="true"></span>
+          <ol class="h-tl__list">
+            <li><span class="h-label">2025 to 2026</span><div><h3 class="h-tl__role">Lead Honors Researcher</h3><p class="h-tl__org">Memory &amp; Decision Making Lab, UC Santa Barbara</p><p class="h-tl__desc">"Techno on the Brain: Rhythmic Scaffolding and Visual Temporal Order Memory." First-author honors thesis. A within-subjects experiment with 59 participants and four auditory conditions. I programmed the task in jsPsych and analyzed accuracy in R with repeated-measures ANOVAs (Bonferroni-corrected) and linear mixed-effects models. The result was a null effect of rhythm on memory. Advisor: Dr. Michael Miller. Graduate supervisor: Luna Li.</p></div></li>
+            <li><span class="h-label">Fall 2025</span><div><h3 class="h-tl__role">Course Research Project</h3><p class="h-tl__org">Laboratory in Advanced Research Methods (PSY 120L), UC Santa Barbara</p><p class="h-tl__desc">"The Effect of Environmental Sound Effect on False Memory through the DRM Paradigm." A 2×2 between-subjects experiment with 67 participants, built in Qualtrics and analyzed in SPSS with a factorial ANOVA and a Pearson correlation. Best Poster at the course colloquium.</p></div></li>
+            <li><span class="h-label">2025 to 2026</span><div><h3 class="h-tl__role">Co-founder</h3><p class="h-tl__org">NOTARAVE, UC Santa Barbara</p><p class="h-tl__desc">Co-founded an electronic music collective run with the Music Production Club (150+ members). Booked local Santa Barbara artists and ran promotion. 15+ events, 10,000+ total attendees, and 1,300+ Instagram followers.</p></div></li>
+            <li><span class="h-label">2024 to 2026</span><div><h3 class="h-tl__role">Research Assistant</h3><p class="h-tl__org">Memory &amp; Decision Making Lab, UC Santa Barbara</p><p class="h-tl__desc">Assisted a graduate researcher on a 64-channel EEG study of recognition memory. Collected behavioral and EEG data, preprocessed recordings in MATLAB and EEGLAB (filtering, ICA artifact rejection, epoching), and supported ERP analysis in R. Recruited and scheduled participants, ran consent and intake sessions, maintained IRB documentation and amendments, trained incoming research assistants, and presented literature reviews at lab meetings.</p></div></li>
+            <li><span class="h-label">2021</span><div><h3 class="h-tl__role">Event Production Lead</h3><p class="h-tl__org">TEDxYouth@ACS, Beirut</p><p class="h-tl__desc">Led a 10-person video team for livestream, recording, and post-production. The footage was published on the TEDx Talks YouTube channel.</p></div></li>
+            <li><span class="h-label">2019</span><div><h3 class="h-tl__role">Market Intelligence Analyst (Intern)</h3><p class="h-tl__org">Industry Intelligence Inc., Los Angeles</p><p class="h-tl__desc">Organized large corporate-structure datasets and carried out competitive landscape analysis in Excel and SQL.</p></div></li>
+            <li><span class="h-label">2017 to present</span><div><h3 class="h-tl__role">Sound Designer &amp; Music Producer</h3><p class="h-tl__org">Freelance</p><p class="h-tl__desc">Freelance sound design and music production in Ableton Live and FL Studio. I produce and DJ techno and ambient music.</p></div></li>
+          </ol>
+        </div>
+      </div>
+    </section>
 
-      <!-- Skills (2-col: tiles left, description right) -->
-      <section class="about-section skills-section">
-        <h2 class="about-section__title section-title-anim">Skills &amp; Tools</h2>
-
-        <div class="skills-layout">
-          <div class="skills-grid">
-            <div class="skill-category skill-anim">
-              <h3>Research &amp; Statistics</h3>
-              <ul>
-                <li>Experimental Design</li>
-                <li>Survey Design</li>
-                <li>Repeated-Measures &amp; Factorial ANOVA</li>
-                <li>Linear Mixed-Effects Models</li>
-                <li>EEG Data Collection &amp; Preprocessing</li>
-                <li>IRB Documentation</li>
-              </ul>
+    <section class="h-sheet h-skills" id="skills" data-nav="dark" data-navrgb="24, 25, 31">
+      <div class="container">
+        <header class="h-grid h-head">
+          <h2 class="h-h2">My Skills</h2>
+          <p>I design experiments and surveys, collect behavioral and EEG data, and analyze the results in R, SPSS, and MATLAB. Alongside research I produce music and run events.</p>
+        </header>
+        <div class="h-grid">
+          <div class="h-kit">
+            <div>
+              <h3>Research &amp; statistics</h3>
+              <ul><li>Experimental design</li><li>Survey design</li><li>Repeated-measures &amp; factorial ANOVA</li><li>Linear mixed-effects models</li><li>EEG data collection &amp; preprocessing</li><li>IRB documentation</li></ul>
             </div>
-
-            <div class="skill-category skill-anim">
-              <h3>Data &amp; Analysis Tools</h3>
-              <ul>
-                <li>R</li>
-                <li>Python</li>
-                <li>SPSS</li>
-                <li>SQL</li>
-                <li>Excel</li>
-                <li>MATLAB / EEGLAB</li>
-                <li>Qualtrics</li>
-                <li>jsPsych</li>
-              </ul>
+            <div>
+              <h3>Data &amp; analysis</h3>
+              <ul><li>R</li><li>Python</li><li>SPSS</li><li>SQL</li><li>Excel</li><li>MATLAB / EEGLAB</li><li>Qualtrics</li><li>jsPsych</li></ul>
             </div>
-
-            <div class="skill-category skill-anim">
-              <h3>Music &amp; Design</h3>
-              <ul>
-                <li>Ableton Live</li>
-                <li>FL Studio</li>
-                <li>Sound Design</li>
-                <li>Music Production</li>
-                <li>Figma</li>
-                <li>Adobe Creative Suite</li>
-              </ul>
+            <div>
+              <h3>Music &amp; design</h3>
+              <ul><li>Ableton Live</li><li>FL Studio</li><li>Sound design</li><li>Music production</li><li>Figma</li><li>Adobe Creative Suite</li></ul>
             </div>
-
-            <div class="skill-category skill-anim">
+            <div>
               <h3>Languages</h3>
-              <ul>
-                <li>English (Native)</li>
-                <li>Arabic (Native)</li>
-                <li>French (Advanced)</li>
-                <li>Spanish (Advanced)</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="skills-description skill-desc-anim">
-            <p class="skills-description__text">
-              I design experiments and surveys, collect behavioral and EEG data, and
-              analyze the results in R, SPSS, and MATLAB. Alongside research I produce
-              music and run events.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Experience Timeline -->
-      <section class="about-section timeline-section">
-        <h2 class="about-section__title section-title-anim">Experience</h2>
-
-        <div class="timeline timeline-anim">
-          <div class="timeline-item">
-            <div class="timeline-item__marker timeline-marker-anim"></div>
-            <div class="timeline-item__content timeline-content-anim">
-              <span class="timeline-item__date">2025 to 2026</span>
-              <h3>Lead Honors Researcher</h3>
-              <p class="timeline-item__org">Memory &amp; Decision Making Lab, UC Santa Barbara</p>
-              <p class="timeline-item__desc">
-                "Techno on the Brain: Rhythmic Scaffolding and Visual Temporal Order Memory." First-author honors thesis.
-                A within-subjects experiment with 59 participants and four auditory conditions. I programmed the
-                task in jsPsych and analyzed accuracy in R with repeated-measures ANOVAs (Bonferroni-corrected)
-                and linear mixed-effects models. The result was a null effect of rhythm on memory.
-                Advisor: Dr. Michael Miller. Graduate supervisor: Luna Li.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-item__marker timeline-marker-anim"></div>
-            <div class="timeline-item__content timeline-content-anim">
-              <span class="timeline-item__date">2024 to 2026</span>
-              <h3>Research Assistant</h3>
-              <p class="timeline-item__org">Memory &amp; Decision Making Lab, UC Santa Barbara</p>
-              <p class="timeline-item__desc">
-                Assisted a graduate researcher on a 64-channel EEG study of recognition memory. Collected
-                behavioral and EEG data, preprocessed recordings in MATLAB and EEGLAB (filtering, ICA artifact
-                rejection, epoching), and supported ERP analysis in R. Recruited and scheduled participants,
-                ran consent and intake sessions, maintained IRB documentation and amendments, trained incoming
-                research assistants, and presented literature reviews at lab meetings.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-item__marker timeline-marker-anim"></div>
-            <div class="timeline-item__content timeline-content-anim">
-              <span class="timeline-item__date">Fall 2025</span>
-              <h3>Course Research Project</h3>
-              <p class="timeline-item__org">Laboratory in Advanced Research Methods (PSY 120L), UC Santa Barbara</p>
-              <p class="timeline-item__desc">
-                "The Effect of Environmental Sound Effect on False Memory through the DRM Paradigm." A 2×2
-                between-subjects experiment with 67 participants, built in Qualtrics and analyzed in SPSS with
-                a factorial ANOVA and a Pearson correlation. Best Poster at the course colloquium.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-item__marker timeline-marker-anim"></div>
-            <div class="timeline-item__content timeline-content-anim">
-              <span class="timeline-item__date">2019</span>
-              <h3>Market Intelligence Analyst (Intern)</h3>
-              <p class="timeline-item__org">Industry Intelligence Inc., Los Angeles</p>
-              <p class="timeline-item__desc">
-                Organized large corporate-structure datasets and carried out competitive landscape analysis
-                in Excel and SQL.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-item__marker timeline-marker-anim"></div>
-            <div class="timeline-item__content timeline-content-anim">
-              <span class="timeline-item__date">2025 to 2026</span>
-              <h3>Co-founder</h3>
-              <p class="timeline-item__org">NOTARAVE, UC Santa Barbara</p>
-              <p class="timeline-item__desc">
-                Co-founded an electronic music collective run with the Music Production Club (150+ members).
-                Booked local Santa Barbara artists and ran promotion. 15+ events, 10,000+ total attendees,
-                and 1,300+ Instagram followers.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-item__marker timeline-marker-anim"></div>
-            <div class="timeline-item__content timeline-content-anim">
-              <span class="timeline-item__date">2017 to Present</span>
-              <h3>Sound Designer &amp; Music Producer</h3>
-              <p class="timeline-item__org">Freelance</p>
-              <p class="timeline-item__desc">
-                Freelance sound design and music production in Ableton Live and FL Studio. I produce and DJ
-                techno and ambient music.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-item__marker timeline-marker-anim"></div>
-            <div class="timeline-item__content timeline-content-anim">
-              <span class="timeline-item__date">2021</span>
-              <h3>Event Production Lead</h3>
-              <p class="timeline-item__org">TEDxYouth@ACS, Beirut</p>
-              <p class="timeline-item__desc">
-                Led a 10-person video team for livestream, recording, and post-production. The footage was
-                published on the TEDx Talks YouTube channel.
-              </p>
+              <ul><li>English <small>Native</small></li><li>Arabic <small>Native</small></li><li>French <small>Advanced</small></li><li>Spanish <small>Advanced</small></li></ul>
             </div>
           </div>
         </div>
-      </section>
-
-      <!-- Personal Note -->
-      <section class="about-section about-personal personal-anim">
-        <div class="about-personal__content">
-          <h2 class="personal-title-anim">Beyond the Work</h2>
-          <p class="personal-p-anim">
-            I am based in Los Angeles. My research interests are memory, attention,
-            and music cognition.
-          </p>
-          <p class="personal-p-anim">
-            I speak English and Arabic natively, and French and Spanish at an advanced
-            level. Outside research I produce and DJ techno and ambient music.
-          </p>
-          <p class="personal-p-anim">
-            I am open to research, analyst, and music-industry roles.
-          </p>
+      </div>
+    </section>
+    <!-- Contact -->
+    <section class="h-sheet h-contact h-light" id="contact" data-nav="light" data-navrgb="238, 240, 242">
+      <div class="container h-grid">
+        <div class="h-rail"><span class="h-label">Contact</span></div>
+        <div class="h-main">
+          <p class="h-contact__line">Open to research, analyst, and music-industry roles.</p>
+          <div class="h-btns">
+            <a class="btn btn--primary" href="mailto:laithjaroudi@gmail.com">laithjaroudi@gmail.com</a>
+            <a class="btn btn--outline" href="https://www.linkedin.com/in/laith-jaroudi-473070243/" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="btn btn--outline" href="assets/Laith_Jaroudi_CV.pdf">Resume</a>
+          </div>
         </div>
-      </section>
-
-    </div>
+      </div>
+    </section>
   </main>
 
   <!-- Footer -->
@@ -395,9 +182,9 @@
     </div>
   </footer>
 
-  <!-- JavaScript -->
+  <!-- Scripts -->
   <script src="js/main.js"></script>
-  <script src="js/animations.js"></script>
   <script src="js/dither-background.js"></script>
+  <script src="js/v2.js"></script>
 </body>
 </html>
