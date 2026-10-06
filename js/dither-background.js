@@ -61,27 +61,7 @@ class DitherBackground {
 
     // Initial resize
     this.resize();
-
-    // Debounce resize for performance
-    let resizeTimeout;
-    const debouncedResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => this.resize(), 100);
-    };
-
-    window.addEventListener('resize', debouncedResize);
-
-    // Handle mobile viewport changes (Safari URL bar, keyboard, pinch-zoom, etc.)
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', debouncedResize);
-      window.visualViewport.addEventListener('scroll', debouncedResize);
-    }
-
-    // Handle orientation changes on mobile
-    window.addEventListener('orientationchange', () => {
-      // Delay to let orientation change complete
-      setTimeout(() => this.resize(), 200);
-    });
+    window.addEventListener('resize', () => this.resize());
 
     return true;
   }
@@ -142,28 +122,8 @@ class DitherBackground {
   resize() {
     const gl = this.gl;
     const dpr = Math.min(window.devicePixelRatio, 1.5);
-
-    // Use visualViewport for better mobile support (handles Safari URL bar)
-    const vv = window.visualViewport;
-    const viewWidth = vv ? vv.width : window.innerWidth;
-    const viewHeight = vv ? vv.height : window.innerHeight;
-
-    // Use the larger of viewport dimensions, document dimensions, or screen dimensions
-    // This ensures coverage even when zoomed out on mobile
-    const baseWidth = Math.max(
-      viewWidth,
-      document.documentElement.clientWidth,
-      window.screen.width
-    );
-    const baseHeight = Math.max(
-      viewHeight,
-      document.documentElement.clientHeight,
-      window.screen.height
-    );
-
-    // Add 20% extra to ensure full coverage during zoom operations (matches CSS 120vw/120vh)
-    const width = Math.floor(baseWidth * 1.2 * dpr);
-    const height = Math.floor(baseHeight * 1.2 * dpr);
+    const width = Math.floor(window.innerWidth * dpr);
+    const height = Math.floor(window.innerHeight * dpr);
 
     if (this.canvas.width !== width || this.canvas.height !== height) {
       this.canvas.width = width;
